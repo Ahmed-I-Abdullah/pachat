@@ -1,0 +1,25 @@
+.message {
+  font-size: 0.8rem;
+    &-mine {
+      max-width: 80%;
+      word-break: break-all;
+      position: relative;
+      background-color: var(--mist-blue);
+      text-align: left;
+      padding: 15px 7% 15px 1%;
+      margin: 15px 0.5% 15px 29.5%;
+      border-radius: 19px;
+  }
+
+  &-friend {
+    max-width: 80%;
+    word-break: break-all;
+    position: relative;
+    background-color: var(--platinum);
+    text-align: right;
+    padding: 15px 1% 15px 7%;
+    margin: 15px 29.5% 15px 0.5%;
+    border-radius: 19px;
+  }
+
+}
