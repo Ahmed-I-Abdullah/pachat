@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 // import UsersListItem from './components/UsersListItem/UsersListItem';
 import ChatMessage from './components/ChatMessage/ChatMessage';
+import MessageInput from './components/MessageInput/MessageInput';
 
 function App() {
   const myUser = {
@@ -38,9 +39,13 @@ function App() {
       <BrowserRouter>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           <Navbar activePage="messages" />
-          <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          <div style={{
+            display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100vh',
+          }}
+          >
             <ChatMessage message={myMessage} />
             <ChatMessage message={myMessage2} />
+            <MessageInput />
           </div>
         </div>
       </BrowserRouter>
