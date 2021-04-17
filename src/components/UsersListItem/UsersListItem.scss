@@ -1,0 +1,27 @@
+.user-item-container {
+  background-color: var(--platinum);
+  border-radius: 19px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 80px;
+  width: 98%;
+  margin: 15px auto;
+  padding: 15px 0px 15px 30px;
+}
+
+.user-item-container > svg {
+  height: 90%;
+  width: 10%;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.user-item-container > svg:hover {
+  margin-right: 0px;
+  opacity: 0.5;
+}
+
+.user-item-container > h1 {
+  color: var(--black);
+}
