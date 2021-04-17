@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 // import UsersListItem from './components/UsersListItem/UsersListItem';
-import ChatMessage from './components/ChatMessage/ChatMessage';
+// import ChatMessage from './components/ChatMessage/ChatMessage';
+import ChatListItem from './components/ChatListItem/ChatListItem';
 import MessageInput from './components/MessageInput/MessageInput';
 
 function App() {
@@ -20,9 +21,15 @@ function App() {
     status: 'good day!',
   };
 
-  const myMessage = {
+  const chatRoom = {
+    id: 'R001',
+    users: [myUser, myUser2],
+  };
+  /* console.log(chatRoom.users); */
+  /* const myMessage = {
     id: 'M5599',
-    content: 'This is my first message! This is my first message! This is my first message! This is my first message!',
+    content: 'This is my first message! This is my first message!
+    This is my first message! This is my first message!',
     creationTime: '',
     user: myUser,
   };
@@ -32,7 +39,7 @@ function App() {
     content: 'Good Job!',
     creationTime: '',
     user: myUser2,
-  };
+  }; */
 
   return (
     <div className="App">
@@ -43,8 +50,7 @@ function App() {
             display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100vh',
           }}
           >
-            <ChatMessage message={myMessage} />
-            <ChatMessage message={myMessage2} />
+            <ChatListItem roomInfo={chatRoom} />
             <MessageInput />
           </div>
         </div>
