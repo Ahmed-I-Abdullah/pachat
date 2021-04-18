@@ -7,7 +7,7 @@
     padding-left: 2%;
   }
   100% {
-    padding-left: 45%;
+    padding-left: 40%;
   }
 }
 
@@ -17,10 +17,10 @@
   cursor: pointer;
   border-radius: 19px;
   display: none;
-  height: 60px;
+  height: 70px;
   width: 95%;
   margin: 40px auto;
-  padding: 12.5px 0px 12.5px 45%;
+  padding: 17.5px 0px 17.5px 40%;
   border: 2px solid var(--blue);
   animation: 0.5s #{move-right};
   animation-play-state: paused;
@@ -32,10 +32,11 @@
   cursor: pointer;
   border-radius: 19px;
   display: flex;
-  height: 60px;
+  height: 70px;
   width: 95%;
   margin: 40px auto;
-  padding: 10px 0px 10px 2%;
+  padding: 20px 0px 20px 2%;
+  color: black;
 }
 
 .chat-list-item:hover > button {
@@ -49,4 +50,8 @@
 
 .chat-list-link:hover {
   animation-play-state: running;
+}
+
+.chat-list-button > h2 {
+  //color: var(--black);
 }

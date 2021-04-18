@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { RiChatForwardFill } from 'react-icons/ri';
+import { AiFillPlusCircle } from 'react-icons/ai';
 import './UsersListItem.scss';
 
 const UsersListItem = ({ user }) => {
@@ -11,8 +11,8 @@ const UsersListItem = ({ user }) => {
 
   return (
     <div className="user-item-container">
-      <h1>{ user.fullName }</h1>
-      <RiChatForwardFill onClick={onClick} height="45px" />
+      <h2>{ user.fullName }</h2>
+      <AiFillPlusCircle onClick={onClick} height="45px" />
     </div>
   );
 };

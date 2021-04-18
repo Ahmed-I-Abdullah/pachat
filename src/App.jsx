@@ -5,6 +5,7 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 // import ChatMessage from './components/ChatMessage/ChatMessage';
 import ChatRoom from './pages/ChatRoom/ChatRoom';
 import ChatList from './pages/ChatList/ChatList';
+import UsersList from './pages/UsersList/UsersList';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 // import MessageInput from './components/MessageInput/MessageInput';
 
@@ -48,6 +49,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/" exact component={ChatList} />
+          <Route path="/users" exact component={UsersList} />
           <Route path="/conversation/:conversationId/:conversationName" component={ChatRoom} />
           <Route component={PageNotFound} />
         </Switch>
