@@ -1,8 +1,9 @@
 .message {
-  font-size: 0.6rem;
+  font-size: 1.3rem;
+  color: var(--white);
     &-mine {
       max-width: 80%;
-      word-break: break-all;
+      overflow-wrap: break-word;
       position: relative;
       background-color: var(--mist-blue);
       text-align: left;

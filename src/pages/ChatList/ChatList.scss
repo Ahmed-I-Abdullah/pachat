@@ -1,0 +1,33 @@
+.chat-list-container {
+  max-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.chat-list-inner {
+  overflow-y: scroll;
+}
+
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  max-height: 100vh;
+  &-header {
+    width: 100%;
+    height: 80px;
+    background-color: var(--light-blue);
+    display: flex;
+    flex-direction: row;
+    padding: 15px 10px;
+    h1 {
+      color: var(--dark-blue);
+    }
+    svg {
+      color: var(--dark-gray);
+      height: 50px;
+      width: 10%;
+    }
+  }
+}

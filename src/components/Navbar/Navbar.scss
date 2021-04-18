@@ -1,6 +1,6 @@
-.container {
+.nav-container {
   height: 100vh;
-  width: 30%;
+  width: 25%;
   background-color: var(--blue);
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
   width: 100%;
   height: 80px;
   background-color: var(--violet-red);
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .inner-logo-div {
@@ -62,7 +62,7 @@
   display: flex;
   flex-direction: row;
   background-color: var(--white);
-  margin: 20px auto;
+  margin: 60px auto;
   text-decoration: none;
   justify-content: center;
   svg {
@@ -86,12 +86,12 @@
 .signout-div {
   cursor: pointer;
   height: 70px;
-  width: 23%;
+  width: 25%;
+  position: fixed;
+  bottom: 0;
   display: flex;
   flex-direction: row;
   background-color: var(--violet-red);
-  position: fixed;
-  bottom: 0px;
   justify-content: center;
   svg {
     height: 60%;

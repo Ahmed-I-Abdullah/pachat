@@ -1,17 +1,19 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import Navbar from './components/Navbar/Navbar';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+// import NavBar from './components/NavBar/NavBar';
 // import UsersListItem from './components/UsersListItem/UsersListItem';
 // import ChatMessage from './components/ChatMessage/ChatMessage';
-import ChatListItem from './components/ChatListItem/ChatListItem';
-import MessageInput from './components/MessageInput/MessageInput';
+import ChatRoom from './pages/ChatRoom/ChatRoom';
+import ChatList from './pages/ChatList/ChatList';
+import PageNotFound from './pages/PageNotFound/PageNotFound';
+// import MessageInput from './components/MessageInput/MessageInput';
 
 function App() {
-  const myUser = {
+  /* const myUser = {
     id: '0001',
     fullName: 'Ahmed',
     imageUrl: '',
-    status: 'good day!',
+    st-atus: 'good day!',
   };
 
   const myUser2 = {
@@ -24,7 +26,7 @@ function App() {
   const chatRoom = {
     id: 'R001',
     users: [myUser, myUser2],
-  };
+  }; */
   /* console.log(chatRoom.users); */
   /* const myMessage = {
     id: 'M5599',
@@ -44,18 +46,12 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <Navbar activePage="messages" />
-          <div style={{
-            display: 'flex', flexDirection: 'column', width: '100%', maxHeight: '100vh',
-          }}
-          >
-            <ChatListItem roomInfo={chatRoom} />
-            <MessageInput />
-          </div>
-        </div>
+        <Switch>
+          <Route path="/" exact component={ChatList} />
+          <Route path="/conversation/:conversationId/:conversationName" component={ChatRoom} />
+          <Route component={PageNotFound} />
+        </Switch>
       </BrowserRouter>
-
     </div>
   );
 }

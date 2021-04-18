@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import './ChatMessage.scss';
 
 const ChatMessage = ({ message }) => {
-  const isMyMessage = () => message.user.id === '0001';
+  const isMyMessage = () => message.user.id === 'u990';
 
   return (
     <div className="message">
       <div className={`message-${isMyMessage() ? 'mine' : 'friend'}`}>
-        <h1 className="message-content">{message.content}</h1>
+        <p className="message-content">{message.content}</p>
       </div>
     </div>
   );

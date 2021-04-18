@@ -4,12 +4,12 @@ import { NavLink } from 'react-router-dom';
 import { TiMessages } from 'react-icons/ti';
 import { FaUsers, FaSignOutAlt } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
-import './Navbar.scss';
+import './NavBar.scss';
 
 import logo from '../../assets/darkLogo.svg';
 
-const Navbar = ({ activePage }) => (
-  <div className="container">
+const NavBar = ({ activePage }) => (
+  <div className="nav-container">
     <div className="logo-div">
       <div className="inner-logo-div">
         <img className="nav-logo" src={logo} alt="logo" />
@@ -50,8 +50,8 @@ const Navbar = ({ activePage }) => (
   </div>
 );
 
-Navbar.propTypes = {
+NavBar.propTypes = {
   activePage: PropTypes.string.isRequired,
 };
 
-export default Navbar;
+export default NavBar;
