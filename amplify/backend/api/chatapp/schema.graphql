@@ -4,3 +4,8 @@ type User @model {
   imageUrl: String
   status: String
 }
+
+type ChatRoom @model {
+  id: ID!
+
+}

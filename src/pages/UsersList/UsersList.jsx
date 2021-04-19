@@ -1,28 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { FiUsers } from 'react-icons/fi';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Auth, API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import UsersListItem from '../../components/UsersListItem/UsersListItem';
 import NavBar from '../../components/NavBar/NavBar';
 import './UsersList.scss';
 import { listUsers } from '../../graphql/queries';
 
-const UsersList = () => {
+const UsersList = ({ isAuthed }) => {
+
   const history = useHistory();
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [users, setUsers] = useState([]);
-
-  async function authenticated() {
-    return Auth.currentAuthenticatedUser()
-      .then(() => { setIsAuthenticated(true); })
-      .catch(() => { setIsAuthenticated(false); });
-  }
-
-  authenticated();
-  if (isAuthenticated === false) {
+  if (isAuthed === false) {
     history.push('/login');
   }
 
+  const [users, setUsers] = useState([]);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -53,6 +46,10 @@ const UsersList = () => {
     </div>
 
   );
+};
+
+UsersList.propTypes = {
+  isAuthed: PropTypes.bool.isRequired,
 };
 
 export default UsersList;

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Auth } from 'aws-amplify';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
-const LogIn = () => {
+const LogIn = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
@@ -32,6 +33,7 @@ const LogIn = () => {
   async function signIn() {
     try {
       const user = await Auth.signIn(username, password);
+      setIsAuthenticated(true);
       console.log(user);
       console.log('Using push now');
       history.push('/');
@@ -106,6 +108,10 @@ const LogIn = () => {
       </h1>
     </div>
   );
+};
+
+LogIn.propTypes = {
+  setIsAuthenticated: PropTypes.func.isRequired,
 };
 
 export default LogIn;

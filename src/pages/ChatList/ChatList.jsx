@@ -1,24 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AiFillWechat } from 'react-icons/ai';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Auth } from 'aws-amplify';
 import ChatListItem from '../../components/ChatListItem/ChatListItem';
 import NavBar from '../../components/NavBar/NavBar';
 import './ChatList.scss';
 import rooms from '../../data/rooms';
 
-const ChatList = () => {
+const ChatList = ({ isAuthed }) => {
   const history = useHistory();
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  async function authenticated() {
-    return Auth.currentAuthenticatedUser()
-      .then(() => { setIsAuthenticated(true); })
-      .catch(() => { setIsAuthenticated(false); });
-  }
-  authenticated();
-  if (isAuthenticated === false) {
+  if (isAuthed === false) {
     history.push('/login');
   }
+
   return (
     <div className="chat-list-container">
       <NavBar activePage="messages" />
@@ -34,6 +28,10 @@ const ChatList = () => {
     </div>
 
   );
+};
+
+ChatList.propTypes = {
+  isAuthed: PropTypes.bool.isRequired,
 };
 
 export default ChatList;

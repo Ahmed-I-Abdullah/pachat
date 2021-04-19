@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {
+  Switch, Route, BrowserRouter,
+} from 'react-router-dom';
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import ChatRoom from './pages/ChatRoom/ChatRoom';
 import ChatList from './pages/ChatList/ChatList';
@@ -11,12 +13,13 @@ import { getUser } from './graphql/queries';
 import { createUser } from './graphql/mutations';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   useEffect(() => {
     const updateUser = async () => {
       let fetchedData = null;
 
       const currentUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
-
+      console.log(`Current user is: ${currentUser}`);
       if (currentUser) {
         fetchedData = await API.graphql(
           graphqlOperation(
@@ -44,14 +47,42 @@ function App() {
     updateUser();
   }, []);
 
+  Auth.currentAuthenticatedUser({ bypassCache: true })
+    .then(() => { setIsAuthenticated(true); })
+    .catch(() => { setIsAuthenticated(false); });
+
   return (
     <div className="App">
       <BrowserRouter>
         <Switch>
-          <Route path="/" exact component={ChatList} />
-          <Route path="/users" exact component={UsersList} />
-          <Route path="/conversation/:conversationId/:conversationName" exact component={ChatRoom} />
-          <Route path="/login" exact component={LogIn} />
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <ChatList isAuthed={isAuthenticated} />
+            )}
+          />
+          <Route
+            path="/users"
+            exact
+            render={() => (
+              <UsersList isAuthed={isAuthenticated} />
+            )}
+          />
+          <Route
+            path="/conversation/:conversationId/:conversationName"
+            exact
+            render={() => (
+              <ChatRoom isAuthed={isAuthenticated} />
+            )}
+          />
+          <Route
+            path="/login"
+            exact
+            render={() => (
+              <LogIn setIsAuthenticated={setIsAuthenticated} />
+            )}
+          />
           <Route path="/signup" exact component={SignUp} />
           <Route component={PageNotFound} />
         </Switch>
