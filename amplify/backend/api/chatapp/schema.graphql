@@ -1,0 +1,6 @@
+type User @model {
+  id: ID!
+  fullName: String!
+  imageUrl: String
+  status: String
+}
