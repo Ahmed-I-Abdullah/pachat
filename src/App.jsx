@@ -1,46 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Auth, API, graphqlOperation } from 'aws-amplify';
 import ChatRoom from './pages/ChatRoom/ChatRoom';
 import ChatList from './pages/ChatList/ChatList';
 import UsersList from './pages/UsersList/UsersList';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import SignUp from './pages/SignUp/SignUp';
 import LogIn from './pages/LogIn/LogIn';
+import { getUser } from './graphql/queries';
+import { createUser } from './graphql/mutations';
 
 function App() {
-  /* const myUser = {
-    id: '0001',
-    fullName: 'Ahmed',
-    imageUrl: '',
-    st-atus: 'good day!',
-  };
+  useEffect(() => {
+    const updateUser = async () => {
+      let fetchedData = null;
 
-  const myUser2 = {
-    id: '0002',
-    fullName: 'Jack',
-    imageUrl: '',
-    status: 'good day!',
-  };
+      const currentUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
 
-  const chatRoom = {
-    id: 'R001',
-    users: [myUser, myUser2],
-  }; */
-  /* console.log(chatRoom.users); */
-  /* const myMessage = {
-    id: 'M5599',
-    content: 'This is my first message! This is my first message!
-    This is my first message! This is my first message!',
-    creationTime: '',
-    user: myUser,
-  };
+      if (currentUser) {
+        fetchedData = await API.graphql(
+          graphqlOperation(
+            getUser, { id: currentUser.attributes.sub },
+          ),
+        );
+      }
 
-  const myMessage2 = {
-    id: 'M5555',
-    content: 'Good Job!',
-    creationTime: '',
-    user: myUser2,
-  }; */
+      if (!fetchedData.data.getUser) {
+        const newUser = {
+          id: currentUser.attributes.sub,
+          fullName: currentUser.attributes.name,
+          imageUrl: 'https://github.com/Ahmed-I-Abdullah/chat-app/blob/authentication/src/assets/profilePicture.png',
+          status: 'Available',
+        };
+
+        await API.graphql(
+          graphqlOperation(
+            createUser, { input: newUser },
+          ),
+        );
+      }
+    };
+
+    updateUser();
+  }, []);
 
   return (
     <div className="App">

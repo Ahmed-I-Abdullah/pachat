@@ -31,6 +31,7 @@ const SignUp = () => {
         username,
         password,
         attributes: {
+          name,
           email,
         },
       });
