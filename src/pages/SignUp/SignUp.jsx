@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Auth } from 'aws-amplify';
+import { useHistory } from 'react-router-dom';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './SignUp.scss';
 
@@ -12,6 +13,8 @@ const SignUp = () => {
   const [confirmEmail, setConfirmEmail] = useState('');
   const [signedUp, setSignedUp] = useState(false);
   const [permenantUsername, setPermenantUsername] = useState('');
+
+  const history = useHistory();
 
   const [errors, setErrors] = useState({
     name: '',
@@ -137,6 +140,7 @@ const SignUp = () => {
       if (validCode) {
         confirmSignUp();
         setErrors({});
+        history.push('/login');
       }
     }
   };

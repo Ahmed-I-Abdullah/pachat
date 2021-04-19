@@ -1,10 +1,11 @@
 import React from 'react';
-/* import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import ChatRoom from './pages/ChatRoom/ChatRoom';
 import ChatList from './pages/ChatList/ChatList';
 import UsersList from './pages/UsersList/UsersList';
-import PageNotFound from './pages/PageNotFound/PageNotFound'; */
+import PageNotFound from './pages/PageNotFound/PageNotFound';
 import SignUp from './pages/SignUp/SignUp';
+import LogIn from './pages/LogIn/LogIn';
 
 function App() {
   /* const myUser = {
@@ -43,15 +44,16 @@ function App() {
 
   return (
     <div className="App">
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Switch>
           <Route path="/" exact component={ChatList} />
           <Route path="/users" exact component={UsersList} />
-          <Route path="/conversation/:conversationId/:conversationName" component={ChatRoom} />
+          <Route path="/conversation/:conversationId/:conversationName" exact component={ChatRoom} />
+          <Route path="/login" exact component={LogIn} />
+          <Route path="/signup" exact component={SignUp} />
           <Route component={PageNotFound} />
         </Switch>
-      </BrowserRouter> */}
-      <SignUp />
+      </BrowserRouter>
     </div>
   );
 }

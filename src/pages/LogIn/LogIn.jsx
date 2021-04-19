@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Auth } from 'aws-amplify';
+import { useHistory } from 'react-router-dom';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
@@ -10,6 +11,8 @@ const LogIn = () => {
     username: '',
     password: '',
   });
+
+  const history = useHistory();
 
   const tempErrors = {};
   let validInputs = true;
@@ -30,6 +33,8 @@ const LogIn = () => {
     try {
       const user = await Auth.signIn(username, password);
       console.log(user);
+      console.log('Using push now');
+      history.push('/');
     } catch (error) {
       console.log('error signing in', error);
       tempErrors.username = 'Username or password are invalid.';
