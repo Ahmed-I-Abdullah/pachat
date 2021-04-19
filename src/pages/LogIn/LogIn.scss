@@ -1,32 +1,28 @@
-.signup-container {
+.login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.login-link {
-  color: var(--black);
-  font-size: 1.5rem;
-  padding-top: 24px;
-}
 
-.signup-div > h1 {
+.login-div > h1 {
   color: var(--blue);
   padding-bottom: 30px;
   font-size: 2.5rem;
 }
 
-.signup-div {
+
+.login-div {
   border: 10px solid var(--violet-red);
   background-color: var(--white);
   box-shadow: 8px 8px 8px 6px #D9D2D2;
   border-radius: 116px;
   margin: auto;
   width: 25%;
-  height: 700px;
+  height: 500px;
   position: absolute;
-  top: 200px;
+  top: 250px;
   padding: 4% 2%;
   display: flex;
   flex-direction: column;
@@ -34,7 +30,8 @@
   align-items: center;
 }
 
-.signup-div > form {
+
+.login-div > form {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,35 +39,36 @@
   width: 75%;
 }
 
-.signup-form-group {
+
+.login-form-group {
   display: flex;
   flex-direction: column;
   height: 100px;
   width: 100%;
 }
 
-.signup-form-group > input {
+.login-form-group > input {
   background-color: var(--light-gray);
   height: 40px;
   margin-top: 5px;
   padding: 5px 2%;
 }
 
-.signup-form-group > input:focus {
+.login-form-group > input:focus {
   background-color: var(--light-blue);
 }
 
-.signup-form-group > label {
+.login-form-group > label {
   font-size: 1.2rem;
 }
 
-.signup-form-group > .errors {
+.login-form-group > .errors {
   height: 10px;
   width: 100%;
   color: red;
 }
 
-.signup-submit {
+.login-submit {
   width: 70%;
   height: 30px;
   border-radius: 20px;
@@ -78,10 +76,17 @@
   cursor: pointer;
 }
 
-.signup-submit:hover {
+.login-submit:hover {
   width: 80%;
 }
 
-.signup-submit:focus {
+.login-submit:focus {
   outline: none;
+}
+
+.signup-link {
+  color: var(--black);
+  font-size: 1.1rem;
+  position: absolute;
+  top: 775px;
 }

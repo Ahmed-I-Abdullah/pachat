@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Auth } from 'aws-amplify';
+import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './SignUp.scss';
-import logo from '../../assets/darkLogo.svg';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -9,6 +9,9 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmEmail, setConfirmEmail] = useState('');
+  const [signedUp, setSignedUp] = useState(false);
+  const [permenantUsername, setPermenantUsername] = useState('');
 
   const [errors, setErrors] = useState({
     name: '',
@@ -16,6 +19,7 @@ const SignUp = () => {
     username: '',
     password: '',
     confirmPassword: '',
+    confirmEmail: '',
   });
 
   async function signUp() {
@@ -33,8 +37,17 @@ const SignUp = () => {
     }
   }
 
+  async function confirmSignUp() {
+    try {
+      await Auth.confirmSignUp(permenantUsername, confirmEmail);
+    } catch (error) {
+      console.log('error confirming sign up', error);
+    }
+  }
+
   const tempErrors = {};
   let validInputs = true;
+  let validCode = true;
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -54,6 +67,10 @@ const SignUp = () => {
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
+  };
+
+  const handleConfirmEmailChange = (e) => {
+    setConfirmEmail(e.target.value);
   };
 
   const validateInputs = () => {
@@ -97,119 +114,152 @@ const SignUp = () => {
     }
   };
 
+  const validateCode = () => {
+    if (confirmEmail === '') {
+      validCode = false;
+      tempErrors.confirmEmail = 'Please enter your code.';
+      setErrors(tempErrors);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    validateInputs();
-    setErrors(tempErrors);
-    console.log(errors);
-    if (validInputs) {
-      console.log(name);
-      setName('');
-      setEmail('');
-      setUsername('');
-      setPassword('');
-      setConfirmPassword('');
-      signUp();
+    if (!signedUp) {
+      validateInputs();
+      setErrors(tempErrors);
+      if (validInputs) {
+        signUp();
+        setPermenantUsername(username);
+        setSignedUp(true);
+      }
+    } else {
+      validateCode();
+      if (validCode) {
+        confirmSignUp();
+        setErrors({});
+      }
     }
   };
 
   return (
     <div className="signup-container">
-
-      <div className="signup-header">
-        <img className="signup-header-logo" src={logo} alt="logo" />
-        <h1 className="signup-header-title">Pachat</h1>
-      </div>
+      <AuthHeader />
+      {!signedUp && (
       <h1 className="login-link">
         ALready have an account?&nbsp;
         <a href="/login">Login</a>
       </h1>
+      )}
       <div className="signup-div">
-        <h1>Sign Up</h1>
-        <form onSubmit={handleSubmit}>
+        {!signedUp ? <h1>Sign Up</h1> : <h1>Confirm Email</h1>}
+        {!signedUp && (
+          <form onSubmit={handleSubmit}>
+            <div className="signup-form-group">
+              <label htmlFor="name">
+                Full Name*
+              </label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                value={name}
+                onChange={handleNameChange}
+                className="signup-form-control"
+                placeholder="Enter name"
+              />
+              <div className="errors">{errors.name}</div>
+            </div>
 
-          <div className="signup-form-group">
-            <label htmlFor="name">
-              Full Name*
-            </label>
-            <input
-              id="name"
-              type="text"
-              name="name"
-              value={name}
-              onChange={handleNameChange}
-              className="signup-form-control"
-              placeholder="Enter name"
-            />
-            <div className="errors">{errors.name}</div>
-          </div>
+            <div className="signup-form-group">
+              <label htmlFor="email">
+                Email*
+              </label>
+              <input
+                type="text"
+                name="email"
+                value={email}
+                onChange={handleEmailChange}
+                className="signup-form-control"
+                placeholder="Enter your email"
+                id="email"
+              />
+              <div className="errors">{errors.email}</div>
+            </div>
 
-          <div className="signup-form-group">
-            <label htmlFor="email">
-              Email*
-            </label>
-            <input
-              type="text"
-              name="email"
-              value={email}
-              onChange={handleEmailChange}
-              className="signup-form-control"
-              placeholder="Enter your email"
-              id="email"
-            />
-            <div className="errors">{errors.email}</div>
-          </div>
+            <div className="signup-form-group">
+              <label htmlFor="username">
+                Username*
+              </label>
+              <input
+                type="text"
+                name="username"
+                value={username}
+                onChange={handleUsernameChange}
+                className="signup-form-control"
+                placeholder="Enter your username"
+                id="username"
+              />
+              <div className="errors">{errors.username}</div>
+            </div>
 
-          <div className="signup-form-group">
-            <label htmlFor="username">
-              Username*
-            </label>
-            <input
-              type="text"
-              name="username"
-              value={username}
-              onChange={handleUsernameChange}
-              className="signup-form-control"
-              placeholder="Enter your username"
-              id="username"
-            />
-            <div className="errors">{errors.username}</div>
-          </div>
+            <div className="signup-form-group">
+              <label htmlFor="password">
+                Password*
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={handlePasswordChange}
+                className="signup-form-control"
+                placeholder="Enter a password"
+                id="password"
+              />
+              <div className="errors">{errors.password}</div>
+            </div>
 
-          <div className="signup-form-group">
-            <label htmlFor="password">
-              Password*
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={handlePasswordChange}
-              className="signup-form-control"
-              placeholder="Enter a password"
-              id="password"
-            />
-            <div className="errors">{errors.password}</div>
-          </div>
+            <div className="signup-form-group">
+              <label htmlFor="confirmPassword">
+                Confirm Password*
+              </label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                className="signup-form-control"
+                placeholder="Enter your password again"
+                id="confirmPassword"
+              />
+              <div className="errors">{errors.confirmPassword}</div>
+            </div>
 
-          <div className="signup-form-group">
-            <label htmlFor="confirmPassword">
-              Confirm Password*
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              className="signup-form-control"
-              placeholder="Enter your password again"
-              id="confirmPassword"
-            />
-            <div className="errors">{errors.confirmPassword}</div>
-          </div>
-
-          <input type="submit" value="Submit" className="signup-submit" />
-        </form>
+            <input type="submit" value="Sign Up" className="signup-submit" />
+          </form>
+        )}
+        {' '}
+        {
+          signedUp && (
+            <form onSubmit={handleSubmit}>
+              <div className="signup-form-group">
+                <label htmlFor="confirmEmail">
+                  Enter the confirmation code sent to your email
+                </label>
+                <input
+                  type="text"
+                  name="confirmEmail"
+                  value={confirmEmail}
+                  onChange={handleConfirmEmailChange}
+                  className="signup-form-control"
+                  placeholder="Enter your code"
+                  id="confirmEmail"
+                />
+                <div className="errors">{errors.confirmEmail}</div>
+                <input type="submit" value="Submit" className="signup-submit" />
+              </div>
+            </form>
+          )
+        }
       </div>
     </div>
   );
