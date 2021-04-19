@@ -29,7 +29,7 @@ function App() {
         const newUser = {
           id: currentUser.attributes.sub,
           fullName: currentUser.attributes.name,
-          imageUrl: 'https://github.com/Ahmed-I-Abdullah/chat-app/blob/authentication/src/assets/profilePicture.png',
+          imageUrl: 'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-3&_nc_sid=12b3be&_nc_ohc=ShshImdEV0cAX9oxBnD&_nc_ht=scontent-hbe1-1.xx&tp=27&oh=2f020e7365f33da4f2078c61a05c7e65&oe=60A1F0B8',
           status: 'Available',
         };
 

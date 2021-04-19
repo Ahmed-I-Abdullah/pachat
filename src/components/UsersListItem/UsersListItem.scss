@@ -5,26 +5,44 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 70px;
+  height: 80px;
   width: 95%;
   margin: 40px auto;
-  padding: 15px 0px 15px 30px;
+  padding: 3px 0px 3px 30px;
+}
+
+.user-item-profile {
+  display: flex;
+  flex-direction: row;
+}
+
+.user-item-data-div {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+}
+
+.user-item-profile > img {
+  border-radius: 30%;
+  padding: 7px 0px;
 }
 
 .user-item-container > svg {
-  height: 90%;
+  height: 60%;
   width: 7%;
   cursor: pointer;
   margin-right: 10px;
+  margin-top: 14px;
 }
 
 .user-item-container > svg:hover {
   opacity: 0.8;
   width: 6.8%;
-  height: 97%;
+  height: 66%;
 }
 
-.user-item-container > h2 {
-  font-size: 1.3rem;
+#user-list-name {
+  color: var(--black);
+  font-size: 1.7rem;
   margin-top: 7px;
 }

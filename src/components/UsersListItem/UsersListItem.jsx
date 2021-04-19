@@ -11,7 +11,13 @@ const UsersListItem = ({ user }) => {
 
   return (
     <div className="user-item-container">
-      <h2>{ user.fullName }</h2>
+      <div className="user-item-profile">
+        <img src={user.imageUrl} alt="user avatar" />
+        <div className="user-item-data-div">
+          <h2 id="user-list-name">{ user.fullName }</h2>
+          <h4>{ user.status }</h4>
+        </div>
+      </div>
       <AiFillPlusCircle onClick={onClick} height="45px" />
     </div>
   );

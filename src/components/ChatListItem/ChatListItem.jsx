@@ -8,7 +8,13 @@ const ChatListItem = ({ roomInfo }) => {
 
   return (
     <div className="chat-list-item">
-      <button type="submit" className="chat-list-button"><h2>{ secondUser.fullName }</h2></button>
+      <button type="submit" className="chat-list-button">
+        <img src={secondUser.imageUrl} alt="user avatar" />
+        <div className="chat-item-data-div">
+          <h2 id="chat-list-name">{ secondUser.fullName }</h2>
+          <h4 id="chat-list-status">{ secondUser.status }</h4>
+        </div>
+      </button>
       <Link className="chat-list-link" to={`conversation/${roomInfo.id}/${secondUser.fullName}`}>
         <h2>Go to Chat!</h2>
       </Link>
