@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Auth } from 'aws-amplify';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './SignUp.scss';
 
-const SignUp = () => {
+const SignUp = ({ setStyles }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -24,6 +25,10 @@ const SignUp = () => {
     confirmPassword: '',
     confirmEmail: '',
   });
+
+  useEffect(() => {
+    setStyles({});
+  }, []);
 
   async function signUp() {
     try {
@@ -268,6 +273,10 @@ const SignUp = () => {
       </div>
     </div>
   );
+};
+
+SignUp.propTypes = {
+  setStyles: PropTypes.func.isRequired,
 };
 
 export default SignUp;

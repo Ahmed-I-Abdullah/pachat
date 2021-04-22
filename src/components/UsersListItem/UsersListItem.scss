@@ -28,17 +28,17 @@
 }
 
 .user-item-container > svg {
-  height: 60%;
+  height: 55%;
   width: 7%;
   cursor: pointer;
   margin-right: 10px;
   margin-top: 14px;
+  transition: transform .2s;
 }
 
 .user-item-container > svg:hover {
   opacity: 0.8;
-  width: 6.8%;
-  height: 66%;
+  transform: scale(1.15);
 }
 
 #user-list-name {

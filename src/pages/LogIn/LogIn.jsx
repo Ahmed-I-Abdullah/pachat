@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Auth } from 'aws-amplify';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
-const LogIn = ({ setIsAuthenticated }) => {
+const LogIn = ({ setIsAuthenticated, setStyles }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
     username: '',
     password: '',
   });
+  useEffect(() => {
+    setStyles({});
+  }, []);
 
   const history = useHistory();
 
@@ -34,6 +37,16 @@ const LogIn = ({ setIsAuthenticated }) => {
     try {
       const user = await Auth.signIn(username, password);
       setIsAuthenticated(true);
+      setStyles({
+        borderRadius: '50px',
+        overflow: 'auto',
+        marginLeft: '4%',
+        marginRight: '4%',
+        marginTop: '4vh',
+        boxShadow: '8px 8px 8px 6px #D9D2D2',
+        border: '10px solid var(--violet-red)',
+        padding: '0',
+      });
       console.log(user);
       console.log('Using push now');
       history.push('/');
@@ -112,6 +125,7 @@ const LogIn = ({ setIsAuthenticated }) => {
 
 LogIn.propTypes = {
   setIsAuthenticated: PropTypes.func.isRequired,
+  setStyles: PropTypes.func.isRequired,
 };
 
 export default LogIn;

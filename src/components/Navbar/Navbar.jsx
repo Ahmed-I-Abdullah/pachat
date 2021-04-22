@@ -29,37 +29,38 @@ const NavBar = ({ activePage }) => {
           <h1 className="title">Pachat</h1>
         </div>
       </div>
+      <div className="signout-adjust">
+        <nav className="nav-div">
+          <NavLink
+            to="/"
+            className={`nav-box-${activePage === 'messages' ? 'active' : 'normal'}`}
+          >
+            <TiMessages height="45px" />
+            <h1>Messages</h1>
+          </NavLink>
 
-      <nav className="nav-div">
-        <NavLink
-          to="/"
-          className={`nav-box-${activePage === 'messages' ? 'active' : 'normal'}`}
-        >
-          <TiMessages height="45px" />
-          <h1>Messages</h1>
-        </NavLink>
+          <NavLink
+            to="/users"
+            className={`nav-box-${activePage === 'users' ? 'active' : 'normal'}`}
+          >
+            <FaUsers height="45px" />
+            <h1>Users</h1>
+          </NavLink>
 
-        <NavLink
-          to="/users"
-          className={`nav-box-${activePage === 'users' ? 'active' : 'normal'}`}
-        >
-          <FaUsers height="45px" />
-          <h1>Users</h1>
-        </NavLink>
+          <NavLink
+            to="/profile"
+            className={`nav-box-${activePage === 'profile' ? 'active' : 'normal'}`}
+          >
+            <CgProfile height="45px" />
+            <h1>Profile</h1>
+          </NavLink>
+        </nav>
 
-        <NavLink
-          to="/profile"
-          className={`nav-box-${activePage === 'profile' ? 'active' : 'normal'}`}
-        >
-          <CgProfile height="45px" />
-          <h1>Profile</h1>
-        </NavLink>
-      </nav>
-
-      <button type="submit" className="signout-div" onClick={signOut}>
-        <FaSignOutAlt height="45px" />
-        <h1>Sign Out</h1>
-      </button>
+        <button type="submit" className="signout-div" onClick={signOut}>
+          <FaSignOutAlt height="45px" />
+          <h1>Sign Out</h1>
+        </button>
+      </div>
     </div>
   );
 };

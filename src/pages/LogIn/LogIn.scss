@@ -19,10 +19,10 @@
   box-shadow: 8px 8px 8px 6px #D9D2D2;
   border-radius: 116px;
   margin: auto;
-  width: 25%;
+  width: 400px;
   height: 500px;
   position: absolute;
-  top: 250px;
+  top: 150px;
   padding: 4% 2%;
   display: flex;
   flex-direction: column;
@@ -88,5 +88,6 @@
   color: var(--black);
   font-size: 1.1rem;
   position: absolute;
-  top: 775px;
+  top: 675px;
+  padding-bottom: 50px;
 }

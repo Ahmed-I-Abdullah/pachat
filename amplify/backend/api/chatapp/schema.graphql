@@ -3,9 +3,21 @@ type User @model {
   fullName: String!
   imageUrl: String
   status: String
+  chatRooms: [ChatRoomUser] @connection(keyName: "byUser", fields: ["id"])
+}
+
+type ChatRoomUser
+@model
+@key(name: "byUser", fields: ["userID", "chatRoomID"])
+@key(name: "byChatRoom", fields: ["chatRoomID", "userID"]) {
+id: ID!
+userID: ID!
+chatRoomID: ID!
+user: User! @connection(fields: ["userID"])
+chatRoom: ChatRoom! @connection(fields: ["chatRoomID"])
 }
 
 type ChatRoom @model {
   id: ID!
-
+  users: [ChatRoomUser] @connection(keyName: "byChatRoom", fields: ["id"])
 }

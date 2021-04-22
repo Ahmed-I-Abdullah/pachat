@@ -14,6 +14,16 @@ import { createUser } from './graphql/mutations';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [styles, setStyles] = useState({
+    borderRadius: '50px',
+    overflow: 'auto',
+    marginLeft: '4%',
+    marginRight: '4%',
+    marginTop: '4vh',
+    boxShadow: '8px 8px 8px 6px #D9D2D2',
+    border: '10px solid var(--violet-red)',
+    height: '90vh',
+  });
   useEffect(() => {
     const updateUser = async () => {
       let fetchedData = null;
@@ -52,7 +62,10 @@ function App() {
     .catch(() => { setIsAuthenticated(false); });
 
   return (
-    <div className="App">
+    <div
+      style={styles}
+      className="App"
+    >
       <BrowserRouter>
         <Switch>
           <Route
@@ -80,10 +93,16 @@ function App() {
             path="/login"
             exact
             render={() => (
-              <LogIn setIsAuthenticated={setIsAuthenticated} />
+              <LogIn setIsAuthenticated={setIsAuthenticated} setStyles={setStyles} />
             )}
           />
-          <Route path="/signup" exact component={SignUp} />
+          <Route
+            path="/signup"
+            exact
+            render={() => (
+              <SignUp setStyles={setStyles} />
+            )}
+          />
           <Route component={PageNotFound} />
         </Switch>
       </BrowserRouter>

@@ -1,12 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { useHistory } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { createChatRoom, createChatRoomUser } from '../../graphql/mutations';
 import './UsersListItem.scss';
 
 const UsersListItem = ({ user }) => {
-  const onClick = () => {
-    /* Will be implemented later to start
-    a conversation with the user */
+  const history = useHistory();
+  const onClick = async () => {
+    try {
+      const newChatRoomObject = await API.graphql(graphqlOperation(createChatRoom, {
+        input: {
+
+        },
+      }));
+
+      const newChatRoom = newChatRoomObject.data.createChatRoom;
+      const currentUser = await Auth.currentAuthenticatedUser();
+
+      await API.graphql(graphqlOperation(createChatRoomUser, {
+        input: {
+          userID: user.id, chatRoomID: newChatRoom.id,
+        },
+      }));
+
+      await API.graphql(graphqlOperation(createChatRoomUser, {
+        input: {
+          userID: currentUser.attributes.sub, chatRoomID: newChatRoom.id,
+        },
+      }));
+
+      history.push(`conversation/${newChatRoom.id}/${user.fullName}`);
+    } catch (e) {
+      console.log(`Room creation error: ${e}`);
+    }
   };
 
   return (
