@@ -1,76 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FiUsers } from 'react-icons/fi';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { CircularProgress } from '@material-ui/core';
 import UsersListItem from '../../components/UsersListItem/UsersListItem';
 import NavBar from '../../components/NavBar/NavBar';
 import './UsersList.scss';
-import { listUsers } from '../../graphql/queries';
-import { getUser } from '../ChatList/queries';
 
-const UsersList = ({ isAuthed }) => {
-  const [chatRooms, setChatRooms] = useState(null);
-  const [users, setUsers] = useState(null);
-  const [loading, setLoading] = useState(true);
+const UsersList = ({ isAuthed, users }) => {
   const history = useHistory();
-  let currentUser = null;
-
-  const customFilter = (userToCheck) => {
-    let roomExits = false;
-    for (let i = 0; i < chatRooms.length; i += 1) {
-      const firstUser = chatRooms[i].chatRoom.users.items[0].user;
-      const secondUser = chatRooms[i].chatRoom.users.items[1].user;
-      if (firstUser.id === currentUser.attributes.sub && secondUser.id === userToCheck.id) {
-        roomExits = true;
-      }
-      if (firstUser.id === userToCheck.id && secondUser.id === currentUser.attributes.sub) {
-        roomExits = true;
-      }
-    }
-    if (!roomExits) {
-      return true;
-    }
-    return false;
-  };
 
   if (isAuthed === false) {
     history.push('/login');
   }
-  let fetchUsers = () => {};
-
-  useEffect(() => {
-    fetchUsers = async () => {
-      currentUser = await Auth.currentAuthenticatedUser();
-      try {
-        const databaseUsers = await API.graphql(graphqlOperation(
-          listUsers,
-        ));
-        const tempUsers = databaseUsers.data.listUsers.items
-          .filter((user) => user.id !== currentUser.attributes.sub);
-
-        const currentUserData = await API.graphql(
-          graphqlOperation(
-            getUser, {
-              id: currentUser.attributes.sub,
-            },
-          ),
-        );
-
-        if (chatRooms === null) {
-          setChatRooms(currentUserData.data.getUser.chatRooms.items);
-        }
-        setUsers(tempUsers.filter(customFilter));
-        if (chatRooms !== null) {
-          setLoading(false);
-        }
-      } catch (e) {
-        console.log(`error: ${e}`);
-      }
-    };
-    fetchUsers();
-  }, [chatRooms]);
 
   return (
     <div className="users-list-container">
@@ -80,7 +22,7 @@ const UsersList = ({ isAuthed }) => {
           <FiUsers />
           <h1>All Users</h1>
         </div>
-        {loading ? (
+        {users === null ? (
           <div className="users-list-loading">
             <div className="users-list-loading-inner">
               <CircularProgress />
@@ -99,6 +41,14 @@ const UsersList = ({ isAuthed }) => {
 
 UsersList.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
+  users: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      fullName: PropTypes.string.isRequired,
+      imageUrl: PropTypes.string,
+      status: PropTypes.string,
+    }).isRequired,
+  ).isRequired,
 };
 
 export default UsersList;
