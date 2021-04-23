@@ -17,7 +17,7 @@ const NavBar = ({ activePage }) => {
       await Auth.signOut();
       history.push('/login');
     } catch (error) {
-      console.log('error signing out: ', error);
+      console.log('Error signing out: ', error);
     }
   }
 

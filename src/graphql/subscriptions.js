@@ -89,6 +89,9 @@ export const onCreateChatRoomUser = /* GraphQL */ `
         users {
           nextToken
         }
+        messages {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -117,6 +120,9 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
       chatRoom {
         id
         users {
+          nextToken
+        }
+        messages {
           nextToken
         }
         createdAt
@@ -149,6 +155,9 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
         users {
           nextToken
         }
+        messages {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -164,6 +173,17 @@ export const onCreateChatRoom = /* GraphQL */ `
       users {
         items {
           id
+          userID
+          chatRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      messages {
+        items {
+          id
+          content
           userID
           chatRoomID
           createdAt
@@ -190,6 +210,17 @@ export const onUpdateChatRoom = /* GraphQL */ `
         }
         nextToken
       }
+      messages {
+        items {
+          id
+          content
+          userID
+          chatRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -208,6 +239,119 @@ export const onDeleteChatRoom = /* GraphQL */ `
           updatedAt
         }
         nextToken
+      }
+      messages {
+        items {
+          id
+          content
+          userID
+          chatRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateMessage = /* GraphQL */ `
+  subscription OnCreateMessage {
+    onCreateMessage {
+      id
+      content
+      userID
+      chatRoomID
+      user {
+        id
+        fullName
+        imageUrl
+        status
+        chatRooms {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        users {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateMessage = /* GraphQL */ `
+  subscription OnUpdateMessage {
+    onUpdateMessage {
+      id
+      content
+      userID
+      chatRoomID
+      user {
+        id
+        fullName
+        imageUrl
+        status
+        chatRooms {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        users {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteMessage = /* GraphQL */ `
+  subscription OnDeleteMessage {
+    onDeleteMessage {
+      id
+      content
+      userID
+      chatRoomID
+      user {
+        id
+        fullName
+        imageUrl
+        status
+        chatRooms {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        users {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt

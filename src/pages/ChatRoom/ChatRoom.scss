@@ -1,5 +1,5 @@
 .chat-room-container {
-  height: 87.51vh;
+  height: calc(90vh - 20px);
   display: flex;
   flex-direction: row;
   margin: 0;
@@ -8,13 +8,14 @@
 
 .chat-room-inner {
   overflow-y: scroll;
+  height: calc( 90vh - 170px );
 }
 
 .chat-room {
   display: flex;
   flex-direction: column;
   width: 75%;
-  max-height: 100vh;
+  justify-content: space-between;
   &-header {
     width: 100%;
     height: 80px;
@@ -34,4 +35,17 @@
       margin-right: 0.3%;
     }
   }
+
+  &-loading {
+    width: 100%;
+    height: 100%;
+  }
+  &-loading-inner {
+    margin: 30vh auto;
+    width: fit-content;
+  }
+}
+
+.input-adjust {
+
 }

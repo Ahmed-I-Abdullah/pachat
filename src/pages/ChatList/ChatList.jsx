@@ -33,9 +33,8 @@ const ChatList = ({ isAuthed }) => {
         if (chatRooms === null) {
           setChatRooms(currentUserData.data.getUser.chatRooms.items);
         }
-        console.log('nummm');
       } catch (e) {
-        console.log('chat rooms error is: ', e);
+        console.log('Chat rooms error in ChatList is: ', e);
       }
     };
     fetchChatRooms();

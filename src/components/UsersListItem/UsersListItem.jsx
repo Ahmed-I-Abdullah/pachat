@@ -31,7 +31,7 @@ const UsersListItem = ({ user }) => {
         },
       }));
 
-      history.push(`conversation/${newChatRoom.id}/${user.fullName}`);
+      history.push(`conversation/${newChatRoom.id}/${user.id}/${user.fullName}`);
     } catch (e) {
       console.log(`Room creation error: ${e}`);
     }

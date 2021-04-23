@@ -28,8 +28,6 @@ const UsersList = ({ isAuthed }) => {
       if (firstUser.id === userToCheck.id && secondUser.id === currentUser.attributes.sub) {
         roomExits = true;
       }
-      console.log('first user is: ', firstUser);
-      console.log('second user is: ', secondUser);
     }
     if (!roomExits) {
       return true;
@@ -60,7 +58,6 @@ const UsersList = ({ isAuthed }) => {
           ),
         );
 
-        console.log(currentUserData);
         if (chatRooms === null) {
           setChatRooms(currentUserData.data.getUser.chatRooms.items);
         }

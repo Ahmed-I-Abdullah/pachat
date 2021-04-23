@@ -35,7 +35,7 @@ const LogIn = ({ setIsAuthenticated, setStyles }) => {
   };
   async function signIn() {
     try {
-      const user = await Auth.signIn(username, password);
+      await Auth.signIn(username, password);
       setIsAuthenticated(true);
       setStyles({
         borderRadius: '50px',
@@ -47,11 +47,9 @@ const LogIn = ({ setIsAuthenticated, setStyles }) => {
         border: '10px solid var(--violet-red)',
         padding: '0',
       });
-      console.log(user);
-      console.log('Using push now');
       history.push('/');
     } catch (error) {
-      console.log('error signing in', error);
+      console.log('Error signing in', error);
       tempErrors.username = 'Username or password are invalid.';
       setErrors(tempErrors);
       setPassword('');

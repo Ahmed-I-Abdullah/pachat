@@ -29,7 +29,7 @@ const ChatListItem = ({ roomInfo }) => {
         <h4 id="chat-list-status">{ secondUser.status }</h4>
       </div>
     </button>
-    <Link className="chat-list-link" to={`conversation/${roomInfo.id}/${secondUser.fullName}`}>
+    <Link className="chat-list-link" to={`conversation/${roomInfo.id}/${secondUser.id}/${secondUser.fullName}`}>
       <h2>Go to Chat!</h2>
     </Link>
   </div>

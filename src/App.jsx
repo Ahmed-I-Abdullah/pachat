@@ -29,7 +29,7 @@ function App() {
       let fetchedData = null;
 
       const currentUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
-      console.log(`Current user is: ${currentUser}`);
+
       if (currentUser) {
         fetchedData = await API.graphql(
           graphqlOperation(
@@ -83,7 +83,7 @@ function App() {
             )}
           />
           <Route
-            path="/conversation/:conversationId/:conversationName"
+            path="/conversation/:roomId/:conversationId/:conversationName"
             exact
             render={() => (
               <ChatRoom isAuthed={isAuthenticated} />

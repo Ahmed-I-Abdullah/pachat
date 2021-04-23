@@ -32,7 +32,7 @@ const SignUp = ({ setStyles }) => {
 
   async function signUp() {
     try {
-      const { user } = await Auth.signUp({
+      await Auth.signUp({
         username,
         password,
         attributes: {
@@ -40,9 +40,8 @@ const SignUp = ({ setStyles }) => {
           email,
         },
       });
-      console.log(user);
     } catch (error) {
-      console.log('error signing up:', error);
+      console.log('Error signing up:', error);
     }
   }
 
@@ -50,7 +49,7 @@ const SignUp = ({ setStyles }) => {
     try {
       await Auth.confirmSignUp(permenantUsername, confirmEmail);
     } catch (error) {
-      console.log('error confirming sign up', error);
+      console.log('Error confirming sign up', error);
     }
   }
 

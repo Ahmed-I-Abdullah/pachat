@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './ChatMessage.scss';
 
-const ChatMessage = ({ message }) => {
-  const isMyMessage = () => message.user.id === 'u990';
+const ChatMessage = ({ message, secondUserID }) => {
+  const isMyMessage = () => message.userID !== secondUserID;
 
   return (
     <div className="message">
@@ -17,15 +17,13 @@ const ChatMessage = ({ message }) => {
 ChatMessage.propTypes = {
   message: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    chatRoomID: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
-    creationTime: PropTypes.string.isRequired,
-    user: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      fullName: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string,
-      status: PropTypes.string,
-    }).isRequired,
+    createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
+    userID: PropTypes.string.isRequired,
   }).isRequired,
+  secondUserID: PropTypes.string.isRequired,
 };
 
 export default ChatMessage;
