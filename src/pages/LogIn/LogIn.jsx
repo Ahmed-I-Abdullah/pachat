@@ -5,7 +5,9 @@ import { useHistory } from 'react-router-dom';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
-const LogIn = ({ setIsAuthenticated, setStyles }) => {
+const LogIn = ({
+  setIsAuthenticated, setStyles,
+}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
@@ -34,26 +36,29 @@ const LogIn = ({ setIsAuthenticated, setStyles }) => {
     }
   };
   async function signIn() {
-    try {
-      await Auth.signIn(username, password);
+    await Auth.signIn(username, password).then(() => {
       setIsAuthenticated(true);
       setStyles({
         borderRadius: '50px',
+        position: 'absolute',
+        top: '4vh',
+        display: 'flex',
         overflow: 'auto',
+        height: '90vh',
+        width: '90%',
         marginLeft: '4%',
         marginRight: '4%',
-        marginTop: '4vh',
         boxShadow: '8px 8px 8px 6px #D9D2D2',
         border: '10px solid var(--violet-red)',
-        padding: '0',
       });
       history.push('/');
-    } catch (error) {
+    }).catch((error) => {
       console.log('Error signing in', error);
+      setIsAuthenticated(false);
       tempErrors.username = 'Username or password are invalid.';
       setErrors(tempErrors);
       setPassword('');
-    }
+    });
   }
 
   const handleUsernameChange = (e) => {

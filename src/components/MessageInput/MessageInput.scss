@@ -1,6 +1,4 @@
 .message-input {
-  //position: fixed;
-  //bottom: 0;
   background-color: var(--platinum);
   width: 100%;
   height: 70px;
@@ -37,4 +35,10 @@
 #message-form > button:hover {
   font-weight: 1000;
   transform: scale(1.1);
+}
+
+@media screen and (max-width: 500px) {
+  #text-message {
+    width: 70%;
+  }
 }

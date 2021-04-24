@@ -25,7 +25,8 @@
 }
 
 body {
-  min-height: 100vh;
+  height: 100vh;
+  height: -webkit-fill-available;
   width: 100%;
   background-color: var(--light-gray);
   -webkit-font-smoothing: antialiased;

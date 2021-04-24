@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: row;
   margin: 0;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -46,6 +47,23 @@
   }
 }
 
-.input-adjust {
+@media screen and (max-width: 900px) {
+  .chat-room {
+    width: 100%;
+    &-header {
+      position: fixed;
+      top: 0;
+      z-index: 10;
+    }
+  }
 
+  .chat-room-container {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .chat-room-inner {
+    margin-top: 80px;
+    height: calc(100vh - 150px);
+  }
 }

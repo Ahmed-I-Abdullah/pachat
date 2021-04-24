@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Switch, Route, BrowserRouter,
+  Switch, Route, BrowserRouter as Router,
 } from 'react-router-dom';
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import ChatRoom from './pages/ChatRoom/ChatRoom';
@@ -9,55 +9,75 @@ import UsersList from './pages/UsersList/UsersList';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import SignUp from './pages/SignUp/SignUp';
 import LogIn from './pages/LogIn/LogIn';
-import { getUser } from './pages/ChatList/queries';
+import { getUser } from './graphql/queries';
 import { createUser } from './graphql/mutations';
-import { listUsers } from './graphql/queries';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [width, setWidth] = useState(window.innerWidth);
+  const [currentUser, setCurrentUser] = useState(null);
+  const breakpoint = 900;
+
   const [styles, setStyles] = useState({
     borderRadius: '50px',
+    position: 'absolute',
+    top: '4vh',
+    display: 'flex',
     overflow: 'auto',
+    height: '90vh',
+    width: '90%',
     marginLeft: '4%',
     marginRight: '4%',
-    marginTop: '4vh',
     boxShadow: '8px 8px 8px 6px #D9D2D2',
     border: '10px solid var(--violet-red)',
-    height: '90vh',
   });
-  const [chatRooms, setChatRooms] = useState(null);
-  const [users, setUsers] = useState(null);
-  let currentUserTwo = null;
 
-  const customFilter = (userToCheck) => {
-    let roomExits = false;
-    for (let i = 0; i < chatRooms.length; i += 1) {
-      const firstUser = chatRooms[i].chatRoom.users.items[0].user;
-      const secondUser = chatRooms[i].chatRoom.users.items[1].user;
-      if (firstUser.id === currentUserTwo.attributes.sub && secondUser.id === userToCheck.id) {
-        roomExits = true;
-      }
-      if (firstUser.id === userToCheck.id && secondUser.id === currentUserTwo.attributes.sub) {
-        roomExits = true;
-      }
+  useEffect(() => {
+    const handleWindowResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleWindowResize);
+
+    if (width <= breakpoint) {
+      setStyles({
+        height: '100vh',
+        overflow: 'hidden',
+      });
+    } else {
+      setStyles({
+        borderRadius: '50px',
+        position: 'absolute',
+        top: '4vh',
+        display: 'flex',
+        overflow: 'auto',
+        height: '90vh',
+        width: '90%',
+        marginLeft: '4%',
+        marginRight: '4%',
+        boxShadow: '8px 8px 8px 6px #D9D2D2',
+        border: '10px solid var(--violet-red)',
+      });
     }
-    if (!roomExits) {
-      return true;
-    }
-    return false;
-  };
+
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, [width]);
 
   useEffect(() => {
     const updateUser = async () => {
       let fetchedData = null;
+      await Auth.currentAuthenticatedUser()
+        .then((user) => {
+          if (currentUser === null) {
+            setCurrentUser(user);
+          }
+          if (isAuthenticated === null) {
+            setIsAuthenticated(true);
+          }
+        })
+        .catch((user) => {
+          console.log('entered catch block: ', user);
+          setIsAuthenticated(false);
+        });
 
-      const currentUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
-
-      if (currentUser) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
+      console.log('currentuser is: ', currentUser);
 
       if (currentUser) {
         fetchedData = await API.graphql(
@@ -66,7 +86,7 @@ function App() {
           ),
         );
 
-        if (!fetchedData.data.getUser) {
+        if (currentUser && !fetchedData.data.getUser) {
           const newUser = {
             id: currentUser.attributes.sub,
             fullName: currentUser.attributes.name,
@@ -83,88 +103,62 @@ function App() {
       }
     };
     updateUser();
-  }, []);
+  }, [isAuthenticated, currentUser]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      currentUserTwo = await Auth.currentAuthenticatedUser();
-      try {
-        const databaseUsers = await API.graphql(graphqlOperation(
-          listUsers,
-        ));
-        const tempUsers = databaseUsers.data.listUsers.items
-          .filter((user) => user.id !== currentUserTwo.attributes.sub);
+  console.log('authenticated', isAuthenticated);
 
-        const currentUserData = await API.graphql(
-          graphqlOperation(
-            getUser, {
-              id: currentUserTwo.attributes.sub,
-            },
-          ),
-        );
-
-        if (chatRooms === null) {
-          setChatRooms(currentUserData.data.getUser.chatRooms.items);
-        }
-
-        if (tempUsers && users === null) {
-          setUsers(tempUsers.filter(customFilter));
-        }
-      } catch (e) {
-        console.log(`error: ${e}`);
-      }
-    };
-
-    fetchUsers();
-  }, [chatRooms, users]);
-
-  return (
-    <div
-      style={styles}
-      className="App"
-    >
-      <BrowserRouter>
-        <Switch>
-          <Route
-            path="/"
-            exact
-            component={() => (
-              <ChatList isAuthed={isAuthenticated} />
-            )}
-          />
-          <Route
-            path="/users"
-            exact
-            component={() => (
-              <UsersList isAuthed={isAuthenticated} users={users} />
-            )}
-          />
-          <Route
-            path="/conversation/:roomId/:conversationId/:conversationName"
-            exact
-            render={() => (
-              <ChatRoom isAuthed={isAuthenticated} />
-            )}
-          />
-          <Route
-            path="/login"
-            exact
-            render={() => (
-              <LogIn setIsAuthenticated={setIsAuthenticated} setStyles={setStyles} />
-            )}
-          />
-          <Route
-            path="/signup"
-            exact
-            render={() => (
-              <SignUp setStyles={setStyles} />
-            )}
-          />
-          <Route component={PageNotFound} />
-        </Switch>
-      </BrowserRouter>
-    </div>
-  );
+  if (isAuthenticated !== null && currentUser !== null) {
+    return (
+      <div
+        style={styles}
+        className="App"
+      >
+        <Router>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => (
+                <ChatList isAuthed={isAuthenticated} currentUserID={currentUser.attributes.sub} />
+              )}
+            />
+            <Route
+              path="/users"
+              exact
+              render={() => (
+                <UsersList isAuthed={isAuthenticated} currentUserID={currentUser.attributes.sub} />
+              )}
+            />
+            <Route
+              path="/conversation/:roomId/:conversationId/:conversationName"
+              exact
+              render={() => (
+                <ChatRoom isAuthed={isAuthenticated} />
+              )}
+            />
+            <Route
+              path="/login"
+              exact
+              render={() => (
+                <LogIn
+                  setIsAuthenticated={setIsAuthenticated}
+                  setStyles={setStyles}
+                />
+              )}
+            />
+            <Route
+              path="/signup"
+              exact
+              render={() => (
+                <SignUp setStyles={setStyles} />
+              )}
+            />
+            <Route component={PageNotFound} />
+          </Switch>
+        </Router>
+      </div>
+    );
+  } return null;
 }
 
 export default App;

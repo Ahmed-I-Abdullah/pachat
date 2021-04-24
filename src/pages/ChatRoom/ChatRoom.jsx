@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import { CircularProgress } from '@material-ui/core';
+import { animateScroll } from 'react-scroll';
 import { getChatRoom, getUser } from '../../graphql/queries';
+import { onCreateMessage } from '../../graphql/subscriptions';
 import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import NavBar from '../../components/NavBar/NavBar';
 import MessageInput from '../../components/MessageInput/MessageInput';
 import './ChatRoom.scss';
 
-const ChatRoom = ({ isAuthed }) => {
+const ChatRoom = ({ isAuthed, currentUserID }) => {
   const { roomId, conversationId, conversationName } = useParams();
   const [roomMessages, setRoomMessages] = useState(null);
   const [secondUser, setSecondUser] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
 
   const history = useHistory();
   if (isAuthed === false) {
     history.push('/login');
   }
+
+  const scrollToBottom = () => {
+    animateScroll.scrollToBottom({
+      containerId: 'room-chats-1',
+    });
+  };
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -39,12 +46,6 @@ const ChatRoom = ({ isAuthed }) => {
           ),
         );
 
-        if (currentUser === null) {
-          setCurrentUser(
-            await Auth.currentAuthenticatedUser(),
-          );
-        }
-
         if (roomMessages === null) {
           setRoomMessages(currentChatRoom.data.getChatRoom.messages.items);
         }
@@ -58,6 +59,20 @@ const ChatRoom = ({ isAuthed }) => {
     };
     fetchMessages();
   }, []);
+
+  useEffect(() => {
+    const subscription = API.graphql(
+      graphqlOperation(onCreateMessage),
+    ).subscribe({
+      next: (event) => {
+        setRoomMessages([...roomMessages, event.value.data.onCreateMessage]);
+        scrollToBottom();
+      },
+      error: (error) => console.warn('subscribtion error: ', error),
+    });
+
+    return () => subscription.unsubscribe();
+  }, [roomMessages]);
 
   return (
     <div className="chat-room-container">
@@ -85,21 +100,22 @@ const ChatRoom = ({ isAuthed }) => {
               </div>
             </div>
           ) : (
-            <div className="chat-room-inner">
+            <div id="room-chats-1" className="chat-room-inner">
               { roomMessages.map((message) => (
                 <ChatMessage
                   message={message}
                   secondUserID={conversationId}
                 />
               ))}
+              { scrollToBottom() }
             </div>
           )}
         </div>
         <div className="input-adjust-two">
-          { currentUser !== null && (
+          { currentUserID !== null && (
             <MessageInput
               roomID={roomId}
-              currentUserID={currentUser.attributes.sub}
+              currentUserID={currentUserID}
             />
           ) }
         </div>
@@ -110,6 +126,7 @@ const ChatRoom = ({ isAuthed }) => {
 
 ChatRoom.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
+  currentUserID: PropTypes.string.isRequired,
 };
 
 export default ChatRoom;

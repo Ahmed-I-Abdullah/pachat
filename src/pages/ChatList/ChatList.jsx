@@ -2,46 +2,53 @@ import React, { useEffect, useState } from 'react';
 import { AiFillWechat } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import { CircularProgress } from '@material-ui/core';
 import ChatListItem from '../../components/ChatListItem/ChatListItem';
 import NavBar from '../../components/NavBar/NavBar';
 import './ChatList.scss';
 import { getUser } from './queries';
+import { onCreateMessage } from '../../graphql/subscriptions';
 
-const ChatList = ({ isAuthed }) => {
+const ChatList = ({ isAuthed, currentUserID }) => {
   const [chatRooms, setChatRooms] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
   if (isAuthed === false) {
     history.push('/login');
   }
 
-  useEffect(() => {
-    const fetchChatRooms = async () => {
-      try {
-        const currentUser = await Auth.currentAuthenticatedUser();
-
-        const currentUserData = await API.graphql(
-          graphqlOperation(
-            getUser, {
-              id: currentUser.attributes.sub,
-            },
-          ),
-        );
-        if (chatRooms === null) {
-          setChatRooms(currentUserData.data.getUser.chatRooms.items);
-        }
-      } catch (e) {
-        console.log('Chat rooms error in ChatList is: ', e);
+  const fetchChatRooms = async () => {
+    try {
+      const currentUserData = await API.graphql(
+        graphqlOperation(
+          getUser, {
+            id: currentUserID,
+          },
+        ),
+      );
+      if (chatRooms === null) {
+        setChatRooms(currentUserData.data.getUser.chatRooms.items);
       }
-    };
-    fetchChatRooms();
-    if (chatRooms !== null) {
-      setLoading(false);
+    } catch (e) {
+      console.log('Chat rooms error in ChatList is: ', e);
     }
-  }, [chatRooms]);
+  };
+
+  useEffect(() => {
+    fetchChatRooms();
+  }, []);
+
+  useEffect(() => {
+    const subscription = API.graphql(graphqlOperation(onCreateMessage)).subscribe(
+      {
+        next: ({ provider, value }) => console.log({ provider, value }),
+        error: (error) => console.warn(error),
+      },
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <div className="chat-list-container">
@@ -51,7 +58,7 @@ const ChatList = ({ isAuthed }) => {
           <AiFillWechat />
           <h1>All Messages</h1>
         </div>
-        {loading ? (
+        {chatRooms === null ? (
           <div className="chat-list-loading">
             <div className="chat-list-loading-inner">
               <CircularProgress />
@@ -70,6 +77,7 @@ const ChatList = ({ isAuthed }) => {
 
 ChatList.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
+  currentUserID: PropTypes.string.isRequired,
 };
 
 export default ChatList;

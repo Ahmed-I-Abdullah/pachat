@@ -4,10 +4,10 @@
 
 @keyframes #{move-right} {
   0% {
-    padding-left: 2%;
+    margin-left: 2%;
   }
   100% {
-    padding-left: 40%;
+    margin-left: 40%;
   }
 }
 
@@ -20,11 +20,16 @@
   height: 80px;
   width: 95%;
   margin: 40px auto;
-  padding: 20px 0px 20px 40%;
+  padding: 20px 0px 20px 0px;
   border: 2px solid var(--blue);
+}
+
+.chat-list-link > h2 {
+  margin-left: 40%;
   animation: 0.5s #{move-right};
   animation-play-state: paused;
 }
+
 
 .chat-item-data-div {
   display: flex;
@@ -62,7 +67,7 @@
 }
 
 
-.chat-list-link:hover {
+.chat-list-link:hover > h2 {
   animation-play-state: running;
 }
 
