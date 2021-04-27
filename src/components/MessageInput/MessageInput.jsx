@@ -9,6 +9,9 @@ const MessageInput = ({ roomID, currentUserID }) => {
 
   const onSend = async () => {
     if (message !== '') {
+      console.log('message: ', message);
+      console.log('currentUserID:  ', currentUserID);
+      console.log('roomID:  ', roomID);
       await API.graphql(graphqlOperation(
         createMessage, {
           input: {

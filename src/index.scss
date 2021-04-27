@@ -26,8 +26,7 @@
 
 body {
   height: 100vh;
-  height: -webkit-fill-available;
-  width: 100%;
+  min-width: 400px;
   background-color: var(--light-gray);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

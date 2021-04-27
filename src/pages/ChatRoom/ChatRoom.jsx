@@ -9,12 +9,15 @@ import { onCreateMessage } from '../../graphql/subscriptions';
 import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import NavBar from '../../components/NavBar/NavBar';
 import MessageInput from '../../components/MessageInput/MessageInput';
+import MenuIcon from '../../components/MenuIcon/MenuIcon';
 import './ChatRoom.scss';
 
-const ChatRoom = ({ isAuthed, currentUserID }) => {
+const ChatRoom = ({ isAuthed, currentUserID, width }) => {
   const { roomId, conversationId, conversationName } = useParams();
   const [roomMessages, setRoomMessages] = useState(null);
   const [secondUser, setSecondUser] = useState(null);
+  const [navOpen, setNavOpen] = useState(false);
+  const showPhoneNav = width <= 900 && navOpen;
 
   const history = useHistory();
   if (isAuthed === false) {
@@ -76,22 +79,30 @@ const ChatRoom = ({ isAuthed, currentUserID }) => {
 
   return (
     <div className="chat-room-container">
-      <NavBar activePage="" />
+      {width > 900 && (<NavBar activePage="" />) }
+      {showPhoneNav && (<NavBar width={width} setNavOpen={setNavOpen} activePage="" />)}
       <div className="chat-room">
         <div className="input-adjust-one">
           <div className="chat-room-header">
-            {secondUser === null ? (
-              <img
-                src="https://scontent-hbe1-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-3&_nc_sid=12b3be&_nc_ohc=ShshImdEV0cAX9oxBnD&_nc_ht=scontent-hbe1-1.xx&tp=27&oh=2f020e7365f33da4f2078c61a05c7e65&oe=60A1F0B8"
-                alt="user avatar"
-              />
-            ) : (
-              <img
-                src={secondUser.imageUrl}
-                alt="user avatar"
-              />
+            { width <= 900 && (
+              <div role="button" aria-hidden="true" onClick={() => setNavOpen(true)} className="chat-room-menu">
+                <MenuIcon />
+              </div>
             )}
-            <h1>{conversationName}</h1>
+            <div className="header-mobile">
+              {secondUser === null ? (
+                <img
+                  src="https://scontent-hbe1-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-3&_nc_sid=12b3be&_nc_ohc=ShshImdEV0cAX9oxBnD&_nc_ht=scontent-hbe1-1.xx&tp=27&oh=2f020e7365f33da4f2078c61a05c7e65&oe=60A1F0B8"
+                  alt="user avatar"
+                />
+              ) : (
+                <img
+                  src={secondUser.imageUrl}
+                  alt="user avatar"
+                />
+              )}
+              <h1>{conversationName}</h1>
+            </div>
           </div>
           {roomMessages === null ? (
             <div className="chat-room-loading">
@@ -127,6 +138,7 @@ const ChatRoom = ({ isAuthed, currentUserID }) => {
 ChatRoom.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
   currentUserID: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
 };
 
 export default ChatRoom;

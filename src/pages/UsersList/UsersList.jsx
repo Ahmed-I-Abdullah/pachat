@@ -8,12 +8,15 @@ import { getUser } from '../ChatList/queries';
 import { listUsers } from '../../graphql/queries';
 import UsersListItem from '../../components/UsersListItem/UsersListItem';
 import NavBar from '../../components/NavBar/NavBar';
+import MenuIcon from '../../components/MenuIcon/MenuIcon';
 import './UsersList.scss';
 
-const UsersList = ({ isAuthed, currentUserID }) => {
+const UsersList = ({ isAuthed, currentUserID, width }) => {
   const [chatRooms, setChatRooms] = useState(null);
   const [users, setUsers] = useState(null);
+  const [navOpen, setNavOpen] = useState(false);
   const history = useHistory();
+  const showPhoneNav = width <= 900 && navOpen;
 
   if (isAuthed === false) {
     history.push('/login');
@@ -70,11 +73,19 @@ const UsersList = ({ isAuthed, currentUserID }) => {
 
   return (
     <div className="users-list-container">
-      <NavBar activePage="users" />
+      {width > 900 && (<NavBar activePage="users" />) }
+      {showPhoneNav && (<NavBar width={width} setNavOpen={setNavOpen} activePage="users" />)}
       <div className="users-list">
         <div className="users-list-header">
-          <FiUsers />
-          <h1>All Users</h1>
+          { width <= 900 && (
+            <div role="button" aria-hidden="true" onClick={() => setNavOpen(true)} className="chat-list-menu">
+              <MenuIcon />
+            </div>
+          )}
+          <div className="header-mobile">
+            <FiUsers />
+            <h1>All Users</h1>
+          </div>
         </div>
         {users === null ? (
           <div className="users-list-loading">
@@ -96,6 +107,7 @@ const UsersList = ({ isAuthed, currentUserID }) => {
 UsersList.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
   currentUserID: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
 };
 
 export default UsersList;

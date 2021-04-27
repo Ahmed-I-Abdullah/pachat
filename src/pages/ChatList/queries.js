@@ -2,39 +2,45 @@
 export const getUser = /* GraphQL */ `
 query GetUser($id: ID!) {
     getUser(id: $id) {
-      id
-      fullName
-      imageUrl
-      status
-      chatRooms {
-        items {
+    id
+    fullName
+    imageUrl
+    status
+    chatRooms {
+      items {
+        id
+        userID
+        chatRoomID
+        createdAt
+        updatedAt
+        chatRoom {
           id
-          userID
-          chatRoomID
-          createdAt
           updatedAt
-          chatRoom {
-            id
-            users {
-              items {
-                user {
-                  id
-                  fullName
-                  imageUrl
-                  status
-                }
+          users {
+            items {
+              user {
+                id
+                fullName
+                imageUrl
+                status
               }
             }
           }
+          messages {
+            items {
+              updatedAt
+              content
+            }
+          }
         }
-        nextToken
       }
-      createdAt
-      updatedAt
+      nextToken
     }
+    createdAt
+    updatedAt
   }
+}
 `;
-
 
 /*{
   "data": {

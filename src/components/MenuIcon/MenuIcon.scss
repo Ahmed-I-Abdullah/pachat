@@ -1,0 +1,24 @@
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  width: 23%;
+  margin: 5px 2%;
+  margin-right: 30px;
+  position: absolute;
+  left: 0px;
+  transition: transform .2s;
+  z-index: 0;
+}
+
+.menu-line {
+  width: 23%;
+  height: 4px;
+  background-color: var(--black);
+  margin: 5px;
+}
+
+.menu-container:hover {
+  transform: scale(1.1);
+}

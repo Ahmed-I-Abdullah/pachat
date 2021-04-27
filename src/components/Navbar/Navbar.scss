@@ -16,18 +16,44 @@
   margin-bottom: 10px;
 }
 
+.close-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin-top: 25px;
+  margin-left: 10px;
+  transition: transform .2s;
+}
+
+.close-icon > svg {
+  width: 30px;
+  height: 30px;
+}
+
+.close-icon:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
 .inner-logo-div {
   height: 70px;
+  width: 100%;
   display: flex;
   flex-direction: row;
   margin: 0 auto;
-  justify-content: center;
+}
+
+.logo-title {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
 }
 
 .nav-logo {
-  width: 20%;
-  height: 80%;
-  margin-top: 10px;
+  width: 45px;
+  height: 45px;
+  margin-top: 15px;
+  margin-right: 20px;
 }
 
 .title {
@@ -46,8 +72,8 @@
   justify-content: center;
 
   svg {
-    height: 60%;
-    width: 10%;
+    height: 40px;
+    width: auto;
     color: var(--white);
     margin-right: 5%;
   }
@@ -68,8 +94,8 @@
   text-decoration: none;
   justify-content: center;
   svg {
-    height: 60%;
-    width: 10%;
+    height: 40px;
+    width: auto;
     margin-right: 5%;
   }
 
@@ -119,6 +145,16 @@
 
 @media screen and (max-width: 900px) {
   .nav-container {
-    display: none;
+    width: 38%;
+    position: absolute;
+    z-index: 20;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .nav-container {
+    width: 50%;
+    position: absolute;
+    z-index: 20;
   }
 }

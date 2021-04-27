@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useHistory } from 'react-router-dom';
 import { TiMessages } from 'react-icons/ti';
-
 import { Auth } from 'aws-amplify';
 import { FaUsers, FaSignOutAlt } from 'react-icons/fa';
+import { AiFillCloseCircle } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
 import './NavBar.scss';
-
 import logo from '../../assets/darkLogo.svg';
 
-const NavBar = ({ activePage }) => {
+const NavBar = ({ activePage, width, setNavOpen }) => {
   const history = useHistory();
+
   async function signOut() {
     try {
       await Auth.signOut();
@@ -25,8 +25,12 @@ const NavBar = ({ activePage }) => {
     <div className="nav-container">
       <div className="logo-div">
         <div className="inner-logo-div">
-          <img className="nav-logo" src={logo} alt="logo" />
-          <h1 className="title">Pachat</h1>
+          {console.log('width now is: ', width)}
+          {width <= 900 && (<div className="close-icon"><AiFillCloseCircle onClick={() => setNavOpen(false)} /></div>)}
+          <div className="logo-title">
+            <img className="nav-logo" src={logo} alt="logo" />
+            <h1 className="title">Pachat</h1>
+          </div>
         </div>
       </div>
       <div className="signout-adjust">
@@ -67,6 +71,13 @@ const NavBar = ({ activePage }) => {
 
 NavBar.propTypes = {
   activePage: PropTypes.string.isRequired,
+  width: PropTypes.number,
+  setNavOpen: PropTypes.func,
+};
+
+NavBar.defaultProps = {
+  width: 1000,
+  setNavOpen: null,
 };
 
 export default NavBar;

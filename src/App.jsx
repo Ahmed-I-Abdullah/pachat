@@ -38,8 +38,8 @@ function App() {
 
     if (width <= breakpoint) {
       setStyles({
-        height: '100vh',
-        overflow: 'hidden',
+        minHeight: '100vh',
+        overflow: 'auto',
       });
     } else {
       setStyles({
@@ -106,6 +106,7 @@ function App() {
   }, [isAuthenticated, currentUser]);
 
   console.log('authenticated', isAuthenticated);
+  console.log('hhh', currentUser);
 
   if (isAuthenticated !== null && currentUser !== null) {
     return (
@@ -119,21 +120,33 @@ function App() {
               path="/"
               exact
               render={() => (
-                <ChatList isAuthed={isAuthenticated} currentUserID={currentUser.attributes.sub} />
+                <ChatList
+                  isAuthed={isAuthenticated}
+                  currentUserID={currentUser.attributes.sub}
+                  width={width}
+                />
               )}
             />
             <Route
               path="/users"
               exact
               render={() => (
-                <UsersList isAuthed={isAuthenticated} currentUserID={currentUser.attributes.sub} />
+                <UsersList
+                  isAuthed={isAuthenticated}
+                  currentUserID={currentUser.attributes.sub}
+                  width={width}
+                />
               )}
             />
             <Route
               path="/conversation/:roomId/:conversationId/:conversationName"
               exact
               render={() => (
-                <ChatRoom isAuthed={isAuthenticated} />
+                <ChatRoom
+                  isAuthed={isAuthenticated}
+                  currentUserID={currentUser.attributes.sub}
+                  width={width}
+                />
               )}
             />
             <Route

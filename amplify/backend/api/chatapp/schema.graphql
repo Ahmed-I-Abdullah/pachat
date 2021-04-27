@@ -17,7 +17,9 @@ user: User! @connection(fields: ["userID"])
 chatRoom: ChatRoom! @connection(fields: ["chatRoomID"])
 }
 
-type ChatRoom @model {
+type ChatRoom
+@model
+{
   id: ID!
   users: [ChatRoomUser] @connection(keyName: "byChatRoom", fields: ["id"])
   messages: [Message] @connection(keyName: "byChatRoom", fields: ["id"])
