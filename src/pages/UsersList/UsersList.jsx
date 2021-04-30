@@ -33,8 +33,6 @@ const UsersList = ({ isAuthed, currentUserID, width }) => {
       if (firstUser.id === userToCheck.id && secondUser.id === currentUserID) {
         roomExits = true;
       }
-      console.log('first user is: ', firstUser);
-      console.log('second user is: ', secondUser);
     }
     if (!roomExits) {
       return true;
@@ -59,13 +57,12 @@ const UsersList = ({ isAuthed, currentUserID, width }) => {
           ),
         );
 
-        console.log(currentUserData);
         if (chatRooms === null) {
           setChatRooms(currentUserData.data.getUser.chatRooms.items);
         }
         setUsers(tempUsers.filter(customFilter));
       } catch (e) {
-        console.log(`error: ${e}`);
+        console.log('error: ', e);
       }
     };
     fetchUsers();

@@ -6,7 +6,7 @@ import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
 const LogIn = ({
-  setIsAuthenticated, setStyles, setCurrentUser, setCurrentUserID, width,
+  setIsAuthenticated, setStyles, setCurrentUser, setCurrentUserID, width, setAfterSignIn,
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -41,6 +41,7 @@ const LogIn = ({
   async function signIn() {
     await Auth.signIn(username, password).then(() => {
       setIsAuthenticated(true);
+      setAfterSignIn(true);
       if (width > 900) {
         setStyles({
           borderRadius: '50px',
@@ -141,6 +142,7 @@ LogIn.propTypes = {
   setStyles: PropTypes.func.isRequired,
   setCurrentUser: PropTypes.func.isRequired,
   setCurrentUserID: PropTypes.func.isRequired,
+  setAfterSignIn: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
 };
 

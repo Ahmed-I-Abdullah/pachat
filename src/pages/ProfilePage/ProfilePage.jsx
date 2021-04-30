@@ -10,7 +10,6 @@ const ProfilePage = ({ isAuthed, currentUser, width }) => {
   const [navOpen, setNavOpen] = useState(false);
   const history = useHistory();
   const showPhoneNav = width <= 900 && navOpen;
-  console.log('flflff: ', currentUser);
   if (isAuthed === false) {
     history.push('/login');
   }

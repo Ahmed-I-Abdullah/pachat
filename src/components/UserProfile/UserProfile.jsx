@@ -14,7 +14,7 @@ const UserProfile = ({ currentUser }) => {
   const [name, setName] = useState(null);
   const [status, setStatus] = useState(null);
   const [imageUrl, setImageUrl] = useState('https://scontent-hbe1-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-3&_nc_sid=12b3be&_nc_ohc=ShshImdEV0cAX9oxBnD&_nc_ht=scontent-hbe1-1.xx&tp=27&oh=2f020e7365f33da4f2078c61a05c7e65&oe=60A1F0B8');
-  console.log('child profile data: ', currentUser);
+
   const handleNameChange = (e) => {
     setName(e.target.value);
   };
@@ -88,7 +88,6 @@ const UserProfile = ({ currentUser }) => {
     }
     const reader = new FileReader();
     const file = e.target.files[0];
-    console.log('photo file is: ', file);
     try {
       reader.readAsDataURL(file);
     } catch (err) {

@@ -10,14 +10,15 @@ import PageNotFound from './pages/PageNotFound/PageNotFound';
 import SignUp from './pages/SignUp/SignUp';
 import LogIn from './pages/LogIn/LogIn';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
-import { getUser } from './graphql/queries';
 import { createUser } from './graphql/mutations';
+import { getUser } from './graphql/queries';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [width, setWidth] = useState(window.innerWidth);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserID, setCurrentUserID] = useState(null);
+  const [afterSignIn, setAfterSignIn] = useState(false);
   const breakpoint = 900;
 
   const [styles, setStyles] = useState({
@@ -33,6 +34,48 @@ function App() {
     boxShadow: '8px 8px 8px 6px #D9D2D2',
     border: '10px solid var(--violet-red)',
   });
+
+  const updateUser = async () => {
+    let fetchedData = null;
+    try {
+      let tempUser = null;
+      await Auth.currentAuthenticatedUser()
+        .then((user) => {
+          setCurrentUser(user);
+          tempUser = user;
+          setCurrentUserID(user.attributes.sub);
+          setIsAuthenticated(true);
+        })
+        .catch((user) => {
+          console.log('entered catch block: ', user);
+          setIsAuthenticated(false);
+        });
+
+      if (tempUser) {
+        fetchedData = await API.graphql(
+          graphqlOperation(
+            getUser, { id: tempUser.attributes.sub },
+          ),
+        );
+
+        if (tempUser && !fetchedData.data.getUser) {
+          const newUser = {
+            id: tempUser.attributes.sub,
+            fullName: tempUser.attributes.name,
+            imageUrl: 'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-3&_nc_sid=12b3be&_nc_ohc=ShshImdEV0cAX9oxBnD&_nc_ht=scontent-hbe1-1.xx&tp=27&oh=2f020e7365f33da4f2078c61a05c7e65&oe=60A1F0B8',
+            status: 'Available',
+          };
+          await API.graphql(
+            graphqlOperation(
+              createUser, { input: newUser },
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      console.log('updating error in app: ', e);
+    }
+  };
 
   useEffect(() => {
     const handleWindowResize = () => setWidth(window.innerWidth);
@@ -65,53 +108,8 @@ function App() {
   }, [width]);
 
   useEffect(() => {
-    console.log('currentUser is app.jsx is: ', currentUser);
-    const updateUser = async () => {
-      let fetchedData = null;
-      await Auth.currentAuthenticatedUser()
-        .then((user) => {
-          setCurrentUser(user);
-          setCurrentUserID(user.attributes.sub);
-
-          if (isAuthenticated === null) {
-            setIsAuthenticated(true);
-          }
-        })
-        .catch((user) => {
-          console.log('entered catch block: ', user);
-          setIsAuthenticated(false);
-        });
-
-      console.log('currentuser is: ', currentUser);
-
-      if (currentUser) {
-        fetchedData = await API.graphql(
-          graphqlOperation(
-            getUser, { id: currentUser.attributes.sub },
-          ),
-        );
-
-        if (currentUser && !fetchedData.data.getUser) {
-          const newUser = {
-            id: currentUser.attributes.sub,
-            fullName: currentUser.attributes.name,
-            imageUrl: 'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-3&_nc_sid=12b3be&_nc_ohc=ShshImdEV0cAX9oxBnD&_nc_ht=scontent-hbe1-1.xx&tp=27&oh=2f020e7365f33da4f2078c61a05c7e65&oe=60A1F0B8',
-            status: 'Available',
-          };
-
-          await API.graphql(
-            graphqlOperation(
-              createUser, { input: newUser },
-            ),
-          );
-        }
-      }
-    };
     updateUser();
-  }, [isAuthenticated]);
-
-  console.log('authenticated', isAuthenticated);
-  console.log('hhh', currentUser);
+  }, [isAuthenticated, afterSignIn]);
 
   if ((isAuthenticated === true && currentUserID !== null && currentUser !== null)
       || (isAuthenticated === false)) {
@@ -165,7 +163,8 @@ function App() {
                   setCurrentUser={setCurrentUser}
                   setCurrentUserID={setCurrentUserID}
                   width={width}
-
+                  updateUser={updateUser}
+                  setAfterSignIn={setAfterSignIn}
                 />
               )}
             />

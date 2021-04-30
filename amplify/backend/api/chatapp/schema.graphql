@@ -1,4 +1,6 @@
-type User @model {
+type User
+@model
+{
   id: ID!
   fullName: String!
   imageUrl: String
@@ -7,7 +9,7 @@ type User @model {
 }
 
 type ChatRoomUser
-@model
+@model(queries: null)
 @key(name: "byUser", fields: ["userID", "chatRoomID"])
 @key(name: "byChatRoom", fields: ["chatRoomID", "userID"]) {
 id: ID!
@@ -27,9 +29,8 @@ type ChatRoom
 
 type Message
 @model
-@key(name: "byChatRoom",
-    fields: ["chatRoomID", "createdAt"],
-    queryField: "messagesByChatRoom") {
+@key(name: "byChatRoom", fields: ["chatRoomID", "createdAt"])
+ {
   id: ID!
   content: String!
   userID: ID!

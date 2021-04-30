@@ -9,9 +9,6 @@ const MessageInput = ({ roomID, currentUserID }) => {
 
   const onSend = async () => {
     if (message !== '') {
-      console.log('message: ', message);
-      console.log('currentUserID:  ', currentUserID);
-      console.log('roomID:  ', roomID);
       await API.graphql(graphqlOperation(
         createMessage, {
           input: {
@@ -25,10 +22,16 @@ const MessageInput = ({ roomID, currentUserID }) => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onSend();
+    }
+  };
+
   return (
     <div className="message-input">
       <div id="message-form">
-        <input id="text-message" type="text" autoComplete="off" placeholder="Type your message here ..." value={message} onChange={(e) => setMessage(e.target.value)} />
+        <input id="text-message" type="text" autoComplete="off" placeholder="Type your message here ..." value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={handleKeyDown} />
         <button onClick={onSend} type="submit">SEND</button>
       </div>
     </div>

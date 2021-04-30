@@ -45,70 +45,6 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
-export const getChatRoomUser = /* GraphQL */ `
-  query GetChatRoomUser($id: ID!) {
-    getChatRoomUser(id: $id) {
-      id
-      userID
-      chatRoomID
-      user {
-        id
-        fullName
-        imageUrl
-        status
-        chatRooms {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      chatRoom {
-        id
-        users {
-          nextToken
-        }
-        messages {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listChatRoomUsers = /* GraphQL */ `
-  query ListChatRoomUsers(
-    $filter: ModelChatRoomUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listChatRoomUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        userID
-        chatRoomID
-        user {
-          id
-          fullName
-          imageUrl
-          status
-          createdAt
-          updatedAt
-        }
-        chatRoom {
-          id
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
 export const getChatRoom = /* GraphQL */ `
   query GetChatRoom($id: ID!) {
     getChatRoom(id: $id) {
@@ -202,48 +138,6 @@ export const listMessages = /* GraphQL */ `
     $nextToken: String
   ) {
     listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        content
-        userID
-        chatRoomID
-        user {
-          id
-          fullName
-          imageUrl
-          status
-          createdAt
-          updatedAt
-        }
-        chatRoom {
-          id
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const messagesByChatRoom = /* GraphQL */ `
-  query MessagesByChatRoom(
-    $chatRoomID: ID
-    $createdAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelMessageFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    messagesByChatRoom(
-      chatRoomID: $chatRoomID
-      createdAt: $createdAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
       items {
         id
         content

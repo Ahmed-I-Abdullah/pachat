@@ -71,7 +71,7 @@ const ChatRoom = ({ isAuthed, currentUserID, width }) => {
         setRoomMessages([...roomMessages, event.value.data.onCreateMessage]);
         scrollToBottom();
       },
-      error: (error) => console.warn('subscribtion error: ', error),
+      error: (error) => console.log('subscribtion error: ', error),
     });
 
     return () => subscription.unsubscribe();

@@ -25,7 +25,6 @@ const NavBar = ({ activePage, width, setNavOpen }) => {
     <div className="nav-container">
       <div className="logo-div">
         <div className="inner-logo-div">
-          {console.log('width now is: ', width)}
           {width <= 900 && (<div className="close-icon"><AiFillCloseCircle onClick={() => setNavOpen(false)} /></div>)}
           <div className="logo-title">
             <img className="nav-logo" src={logo} alt="logo" />

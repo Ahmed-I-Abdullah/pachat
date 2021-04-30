@@ -10,7 +10,9 @@ import MenuIcon from '../../components/MenuIcon/MenuIcon';
 import './ChatList.scss';
 import { getUser } from './queries';
 
-const ChatList = ({ isAuthed, currentUserID, width }) => {
+const ChatList = ({
+  isAuthed, currentUserID, width,
+}) => {
   const [chatRooms, setChatRooms] = useState(null);
   const [navOpen, setNavOpen] = useState(false);
   const history = useHistory();
@@ -29,7 +31,10 @@ const ChatList = ({ isAuthed, currentUserID, width }) => {
           },
         ),
       );
-      console.log(currentUserData.data.getUser.chatRooms.items);
+
+      if (currentUserData.data.getUser === null) {
+        setChatRooms([]);
+      }
       if (chatRooms === null) {
         setChatRooms(currentUserData.data.getUser.chatRooms.items.sort(
           (a, b) => {
@@ -79,7 +84,6 @@ const ChatList = ({ isAuthed, currentUserID, width }) => {
         )}
       </div>
     </div>
-
   );
 };
 
