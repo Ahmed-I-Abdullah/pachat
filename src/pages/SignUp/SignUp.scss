@@ -1,0 +1,102 @@
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-link {
+  color: var(--black);
+  font-size: 1.3rem;
+  padding-top: 24px;
+  margin: auto;
+}
+
+.signup-div > h1 {
+  color: var(--blue);
+  padding-bottom: 30px;
+  font-size: 2.5rem;
+}
+
+.signup-div {
+  border: 10px solid var(--violet-red);
+  background-color: var(--white);
+  box-shadow: 8px 8px 8px 6px #D9D2D2;
+  border-radius: 95px;
+  margin: 0 auto;
+  width: 360px;
+  //min-height: 750px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 100px;
+  margin-top: 30px;
+}
+
+.signup-div > form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 75%;
+}
+
+.signup-form-group {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  width: 100%;
+}
+
+.signup-form-group > input {
+  background-color: var(--light-gray);
+  height: 40px;
+  margin-top: 5px;
+  padding: 5px 2%;
+}
+
+.signup-form-group > input:focus {
+  background-color: var(--light-blue);
+}
+
+.signup-form-group > label {
+  font-size: 1.2rem;
+}
+
+.signup-form-group > .errors {
+  height: 10px;
+  width: 100%;
+  color: red;
+}
+
+.signup-submit {
+  width: 70%;
+  height: 30px;
+  border-radius: 20px;
+  background-color: var(--blue);
+  cursor: pointer;
+}
+
+.signup-submit:hover {
+  width: 80%;
+}
+
+.signup-submit:focus {
+  outline: none;
+}
+
+@media screen and (max-width: 500px) {
+  .signup-div {
+    width: 300px;
+    border-radius: 80px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .signup-div {
+    width: 260px;
+    border-radius: 70px;
+  }
+}

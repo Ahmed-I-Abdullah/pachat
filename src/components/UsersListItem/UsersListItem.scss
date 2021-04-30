@@ -1,0 +1,50 @@
+.user-item-container {
+  background-color: var(--platinum);
+  border-radius: 19px;
+  border: 2px solid var(--black);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 80px;
+  width: 95%;
+  margin: 40px auto;
+  padding: 3px 0px 3px 30px;
+}
+
+.user-item-profile {
+  display: flex;
+  flex-direction: row;
+}
+
+.user-item-data-div {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+}
+
+.user-item-profile > img {
+  border-radius: 30%;
+  padding: 7px 0px;
+  width: 70px;
+  height: 70px;
+}
+
+.user-item-container > svg {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 14px;
+  transition: transform .2s;
+}
+
+.user-item-container > svg:hover {
+  opacity: 0.8;
+  transform: scale(1.15);
+}
+
+#user-list-name {
+  color: var(--black);
+  font-size: 1.7rem;
+  margin-top: 7px;
+}

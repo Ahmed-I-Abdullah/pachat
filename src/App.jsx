@@ -1,15 +1,197 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import {
+  Switch, Route, BrowserRouter as Router,
+} from 'react-router-dom';
+import { Auth, API, graphqlOperation } from 'aws-amplify';
+import ChatRoom from './pages/ChatRoom/ChatRoom';
+import ChatList from './pages/ChatList/ChatList';
+import UsersList from './pages/UsersList/UsersList';
+import PageNotFound from './pages/PageNotFound/PageNotFound';
+import SignUp from './pages/SignUp/SignUp';
+import LogIn from './pages/LogIn/LogIn';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
+import { createUser } from './graphql/mutations';
+import { getUser } from './graphql/queries';
 
 function App() {
-  return (
-    <div className="App">
-      <div style={{ marginLeft: '30%', marginTop: '10%' }}>
-        <img style={{ width: '50%', height: '50%', marginLeft: '10%' }} src={logo} alt="logo" />
-        <h1 style={{ color: 'black', margin: 'auto' }}>Pachat Is Under Development. Please Come Back Soon.</h1>
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [width, setWidth] = useState(window.innerWidth);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserID, setCurrentUserID] = useState(null);
+  const [afterSignIn, setAfterSignIn] = useState(false);
+  const breakpoint = 900;
+
+  const [styles, setStyles] = useState({
+    borderRadius: '50px',
+    position: 'absolute',
+    top: '4vh',
+    display: 'flex',
+    overflow: 'auto',
+    height: '90vh',
+    width: '90%',
+    marginLeft: '4%',
+    marginRight: '4%',
+    boxShadow: '8px 8px 8px 6px #D9D2D2',
+    border: '10px solid var(--violet-red)',
+  });
+
+  const updateUser = async () => {
+    let fetchedData = null;
+    try {
+      let tempUser = null;
+      await Auth.currentAuthenticatedUser()
+        .then((user) => {
+          setCurrentUser(user);
+          tempUser = user;
+          setCurrentUserID(user.attributes.sub);
+          setIsAuthenticated(true);
+        })
+        .catch((user) => {
+          console.log('entered catch block: ', user);
+          setIsAuthenticated(false);
+        });
+
+      if (tempUser) {
+        fetchedData = await API.graphql(
+          graphqlOperation(
+            getUser, { id: tempUser.attributes.sub },
+          ),
+        );
+
+        if (tempUser && !fetchedData.data.getUser) {
+          const newUser = {
+            id: tempUser.attributes.sub,
+            fullName: tempUser.attributes.name,
+            imageUrl: 'https://scontent-hbe1-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-3&_nc_sid=12b3be&_nc_ohc=ShshImdEV0cAX9oxBnD&_nc_ht=scontent-hbe1-1.xx&tp=27&oh=2f020e7365f33da4f2078c61a05c7e65&oe=60A1F0B8',
+            status: 'Available',
+          };
+          await API.graphql(
+            graphqlOperation(
+              createUser, { input: newUser },
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      console.log('updating error in app: ', e);
+    }
+  };
+
+  useEffect(() => {
+    const handleWindowResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleWindowResize);
+
+    if (width <= breakpoint) {
+      setStyles({
+        minHeight: '100vh',
+        overflow: 'auto',
+      });
+    } else if (isAuthenticated === false) {
+      setStyles({});
+    } else {
+      setStyles({
+        borderRadius: '50px',
+        position: 'absolute',
+        top: '4vh',
+        display: 'flex',
+        overflow: 'auto',
+        height: '90vh',
+        width: '90%',
+        marginLeft: '4%',
+        marginRight: '4%',
+        boxShadow: '8px 8px 8px 6px #D9D2D2',
+        border: '10px solid var(--violet-red)',
+      });
+    }
+
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, [width]);
+
+  useEffect(() => {
+    updateUser();
+  }, [isAuthenticated, afterSignIn]);
+
+  if ((isAuthenticated === true && currentUserID !== null && currentUser !== null)
+      || (isAuthenticated === false)) {
+    return (
+      <div
+        style={styles}
+        className="App"
+      >
+        <Router>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => (
+                <ChatList
+                  isAuthed={isAuthenticated}
+                  currentUserID={currentUserID}
+                  width={width}
+                />
+              )}
+            />
+            <Route
+              path="/users"
+              exact
+              render={() => (
+                <UsersList
+                  isAuthed={isAuthenticated}
+                  currentUserID={currentUserID}
+                  width={width}
+                />
+              )}
+            />
+            <Route
+              path="/conversation/:roomId/:conversationId/:conversationName"
+              exact
+              render={() => (
+                <ChatRoom
+                  isAuthed={isAuthenticated}
+                  currentUserID={currentUserID}
+                  width={width}
+                />
+              )}
+            />
+            <Route
+              path="/login"
+              exact
+              render={() => (
+                <LogIn
+                  setIsAuthenticated={setIsAuthenticated}
+                  setStyles={setStyles}
+                  setCurrentUser={setCurrentUser}
+                  setCurrentUserID={setCurrentUserID}
+                  width={width}
+                  updateUser={updateUser}
+                  setAfterSignIn={setAfterSignIn}
+                />
+              )}
+            />
+            <Route
+              path="/signup"
+              exact
+              render={() => (
+                <SignUp setStyles={setStyles} />
+              )}
+            />
+            <Route
+              path="/profile"
+              exact
+              render={() => (
+                <ProfilePage
+                  isAuthed={isAuthenticated}
+                  currentUser={currentUser}
+                  width={width}
+                />
+              )}
+            />
+            <Route component={PageNotFound} />
+          </Switch>
+        </Router>
       </div>
-    </div>
-  );
+    );
+  } return null;
 }
 
 export default App;

@@ -1,0 +1,41 @@
+type User
+@model
+{
+  id: ID!
+  fullName: String!
+  imageUrl: String
+  status: String
+  chatRooms: [ChatRoomUser] @connection(keyName: "byUser", fields: ["id"])
+}
+
+type ChatRoomUser
+@model(queries: null)
+@key(name: "byUser", fields: ["userID", "chatRoomID"])
+@key(name: "byChatRoom", fields: ["chatRoomID", "userID"]) {
+id: ID!
+userID: ID!
+chatRoomID: ID!
+user: User! @connection(fields: ["userID"])
+chatRoom: ChatRoom! @connection(fields: ["chatRoomID"])
+}
+
+type ChatRoom
+@model
+{
+  id: ID!
+  users: [ChatRoomUser] @connection(keyName: "byChatRoom", fields: ["id"])
+  messages: [Message] @connection(keyName: "byChatRoom", fields: ["id"])
+}
+
+type Message
+@model
+@key(name: "byChatRoom", fields: ["chatRoomID", "createdAt"])
+ {
+  id: ID!
+  content: String!
+  userID: ID!
+  chatRoomID: ID!
+  user: User! @connection(fields: ["userID"])
+  chatRoom: ChatRoom! @connection(fields: ["chatRoomID"])
+  createdAt: String!
+}

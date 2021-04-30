@@ -10,6 +10,10 @@
   --blue-gray: #A9D2F1; /*strokes*/
   --dark-gray: #949292;
   --dark-blue: #094067;
+  --light-gray: #F6F5F7;
+  --black: #000000;
+  --light-blue: #D8EEFE;
+  --purple-blue: #90B4CE;
 
   --body-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --header-font: -apple-system, BlinkMacSystemFont, "Segoe UI", 'Fjalla One', sans-serif;
@@ -22,10 +26,9 @@
 }
 
 body {
-  min-height: 100vh;
-  width: 100%;
-  min-width: 400px;
-  background-color: var(--white);
+  height: 100vh;
+  min-width: 310px;
+  background-color: var(--light-gray);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
