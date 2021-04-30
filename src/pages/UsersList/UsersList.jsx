@@ -92,7 +92,7 @@ const UsersList = ({ isAuthed, currentUserID, width }) => {
           </div>
         ) : (
           <div className="users-list-inner">
-            {users.map((user) => <UsersListItem user={user} />)}
+            {users.map((user) => <UsersListItem key={user.id} user={user} />)}
           </div>
         )}
       </div>

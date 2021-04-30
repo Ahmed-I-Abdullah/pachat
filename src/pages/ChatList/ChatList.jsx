@@ -79,7 +79,12 @@ const ChatList = ({
           </div>
         ) : (
           <div className="chat-list-inner">
-            {chatRooms.map((room) => <ChatListItem roomInfo={room.chatRoom} />)}
+            {chatRooms.map((room) => (
+              <ChatListItem
+                key={room.chatRoom.id}
+                roomInfo={room.chatRoom}
+              />
+            ))}
           </div>
         )}
       </div>
