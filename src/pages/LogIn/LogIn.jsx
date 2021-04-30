@@ -6,7 +6,7 @@ import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
 const LogIn = ({
-  setIsAuthenticated, setStyles,
+  setIsAuthenticated, setStyles, setCurrentUser, setCurrentUserID, width,
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -15,6 +15,9 @@ const LogIn = ({
     password: '',
   });
   useEffect(() => {
+    setCurrentUser(null);
+    setCurrentUserID(null);
+    setIsAuthenticated(false);
     setStyles({});
   }, []);
 
@@ -38,19 +41,26 @@ const LogIn = ({
   async function signIn() {
     await Auth.signIn(username, password).then(() => {
       setIsAuthenticated(true);
-      setStyles({
-        borderRadius: '50px',
-        position: 'absolute',
-        top: '4vh',
-        display: 'flex',
-        overflow: 'auto',
-        height: '90vh',
-        width: '90%',
-        marginLeft: '4%',
-        marginRight: '4%',
-        boxShadow: '8px 8px 8px 6px #D9D2D2',
-        border: '10px solid var(--violet-red)',
-      });
+      if (width > 900) {
+        setStyles({
+          borderRadius: '50px',
+          position: 'absolute',
+          top: '4vh',
+          display: 'flex',
+          overflow: 'auto',
+          height: '90vh',
+          width: '90%',
+          marginLeft: '4%',
+          marginRight: '4%',
+          boxShadow: '8px 8px 8px 6px #D9D2D2',
+          border: '10px solid var(--violet-red)',
+        });
+      } else {
+        setStyles({
+          minHeight: '100vh',
+          overflow: 'auto',
+        });
+      }
       history.push('/');
     }).catch((error) => {
       console.log('Error signing in', error);
@@ -129,6 +139,9 @@ const LogIn = ({
 LogIn.propTypes = {
   setIsAuthenticated: PropTypes.func.isRequired,
   setStyles: PropTypes.func.isRequired,
+  setCurrentUser: PropTypes.func.isRequired,
+  setCurrentUserID: PropTypes.func.isRequired,
+  width: PropTypes.number.isRequired,
 };
 
 export default LogIn;

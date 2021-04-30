@@ -151,9 +151,25 @@
   }
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 736px) {
   .nav-container {
     width: 50%;
+    position: absolute;
+    z-index: 20;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .nav-container {
+    width: 60%;
+    position: absolute;
+    z-index: 20;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .nav-container {
+    width: 80%;
     position: absolute;
     z-index: 20;
   }

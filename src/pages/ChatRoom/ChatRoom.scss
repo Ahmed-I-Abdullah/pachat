@@ -23,6 +23,7 @@
     background-color: var(--light-blue);
     display: flex;
     flex-direction: row;
+    z-index: 10;
     h1 {
       color: var(--dark-blue);
       padding: 15px 10px;
@@ -42,6 +43,11 @@
   flex-direction: row;
   margin-left: 30px;
   width: 300px;
+}
+
+.header-mobile > img {
+  width: 70px;
+  height: 70px;
 }
 
 .chat-room-menu {

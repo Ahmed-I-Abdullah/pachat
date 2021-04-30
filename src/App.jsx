@@ -9,6 +9,7 @@ import UsersList from './pages/UsersList/UsersList';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import SignUp from './pages/SignUp/SignUp';
 import LogIn from './pages/LogIn/LogIn';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 import { getUser } from './graphql/queries';
 import { createUser } from './graphql/mutations';
 
@@ -16,6 +17,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [width, setWidth] = useState(window.innerWidth);
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserID, setCurrentUserID] = useState(null);
   const breakpoint = 900;
 
   const [styles, setStyles] = useState({
@@ -41,6 +43,8 @@ function App() {
         minHeight: '100vh',
         overflow: 'auto',
       });
+    } else if (isAuthenticated === false) {
+      setStyles({});
     } else {
       setStyles({
         borderRadius: '50px',
@@ -61,13 +65,14 @@ function App() {
   }, [width]);
 
   useEffect(() => {
+    console.log('currentUser is app.jsx is: ', currentUser);
     const updateUser = async () => {
       let fetchedData = null;
       await Auth.currentAuthenticatedUser()
         .then((user) => {
-          if (currentUser === null) {
-            setCurrentUser(user);
-          }
+          setCurrentUser(user);
+          setCurrentUserID(user.attributes.sub);
+
           if (isAuthenticated === null) {
             setIsAuthenticated(true);
           }
@@ -103,12 +108,13 @@ function App() {
       }
     };
     updateUser();
-  }, [isAuthenticated, currentUser]);
+  }, [isAuthenticated]);
 
   console.log('authenticated', isAuthenticated);
   console.log('hhh', currentUser);
 
-  if (isAuthenticated !== null && currentUser !== null) {
+  if ((isAuthenticated === true && currentUserID !== null && currentUser !== null)
+      || (isAuthenticated === false)) {
     return (
       <div
         style={styles}
@@ -122,7 +128,7 @@ function App() {
               render={() => (
                 <ChatList
                   isAuthed={isAuthenticated}
-                  currentUserID={currentUser.attributes.sub}
+                  currentUserID={currentUserID}
                   width={width}
                 />
               )}
@@ -133,7 +139,7 @@ function App() {
               render={() => (
                 <UsersList
                   isAuthed={isAuthenticated}
-                  currentUserID={currentUser.attributes.sub}
+                  currentUserID={currentUserID}
                   width={width}
                 />
               )}
@@ -144,7 +150,7 @@ function App() {
               render={() => (
                 <ChatRoom
                   isAuthed={isAuthenticated}
-                  currentUserID={currentUser.attributes.sub}
+                  currentUserID={currentUserID}
                   width={width}
                 />
               )}
@@ -156,6 +162,10 @@ function App() {
                 <LogIn
                   setIsAuthenticated={setIsAuthenticated}
                   setStyles={setStyles}
+                  setCurrentUser={setCurrentUser}
+                  setCurrentUserID={setCurrentUserID}
+                  width={width}
+
                 />
               )}
             />
@@ -164,6 +174,17 @@ function App() {
               exact
               render={() => (
                 <SignUp setStyles={setStyles} />
+              )}
+            />
+            <Route
+              path="/profile"
+              exact
+              render={() => (
+                <ProfilePage
+                  isAuthed={isAuthenticated}
+                  currentUser={currentUser}
+                  width={width}
+                />
               )}
             />
             <Route component={PageNotFound} />
