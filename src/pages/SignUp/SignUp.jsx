@@ -16,6 +16,7 @@ const SignUp = ({ setStyles }) => {
   const [permenantUsername, setPermenantUsername] = useState('');
 
   const history = useHistory();
+  const tempErrors = {};
 
   const [errors, setErrors] = useState({
     name: '',
@@ -31,18 +32,26 @@ const SignUp = ({ setStyles }) => {
   }, []);
 
   async function signUp() {
-    try {
-      await Auth.signUp({
-        username,
-        password,
-        attributes: {
-          name,
-          email,
-        },
+    await Auth.signUp({
+      username,
+      password,
+      attributes: {
+        name,
+        email,
+      },
+    }).then(() => setSignedUp(true))
+      .catch((error) => {
+        if (error.code === 'UsernameExistsException') {
+          tempErrors.username = 'Username already exits.';
+          setErrors(tempErrors);
+          setUsername('');
+        } else if (error.code === 'InvalidParameterException') {
+          tempErrors.password = 'Password must be more than 6 characters';
+          setErrors(tempErrors);
+          setPassword('');
+        }
+        console.log('Error signing up:', error);
       });
-    } catch (error) {
-      console.log('Error signing up:', error);
-    }
   }
 
   async function confirmSignUp() {
@@ -53,7 +62,6 @@ const SignUp = ({ setStyles }) => {
     }
   }
 
-  const tempErrors = {};
   let validInputs = true;
   let validCode = true;
 
@@ -138,7 +146,6 @@ const SignUp = ({ setStyles }) => {
       if (validInputs) {
         signUp();
         setPermenantUsername(username);
-        setSignedUp(true);
       }
     } else {
       validateCode();
