@@ -117,7 +117,7 @@ const UserProfile = ({ currentUser }) => {
           <div className="img-wrap img-upload">
             <img alt="user avatar " src={imageUrl} />
           </div>
-          <input id="photo-upload" type="file" accept="image/*" multiple="false" onChange={onPhotoUpload} />
+          <input id="photo-upload" type="file" accept="image/*" multiple={false} onChange={onPhotoUpload} />
         </label>
       </div>
       <div className="profile-name">

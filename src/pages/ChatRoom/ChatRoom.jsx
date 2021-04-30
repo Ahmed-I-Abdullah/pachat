@@ -114,6 +114,7 @@ const ChatRoom = ({ isAuthed, currentUserID, width }) => {
             <div id="room-chats-1" className="chat-room-inner">
               { roomMessages.map((message) => (
                 <ChatMessage
+                  key={message.id}
                   message={message}
                   secondUserID={conversationId}
                 />
