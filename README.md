@@ -1,8 +1,8 @@
 # Pachat
 ---
-![](src/assets/design/mockup.jpg)
+## A Real-Time Chat App
 
-A Real-Time Chat App written with GraphQL, AWS AppSync, AWS Amplify, React, & Redux
+![](src/assets/design/mockup.jpg)
 
 ## Built With:
 - AWS AppSync
