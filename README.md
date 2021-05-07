@@ -1,6 +1,6 @@
 # Pachat
 ---
-##A Real-Time Chat App
+## A Real-Time Chat App
 
 ![](src/assets/design/mockup.jpg)
 
