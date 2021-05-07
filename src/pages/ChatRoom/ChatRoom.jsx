@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { API, graphqlOperation } from 'aws-amplify';
 import { CircularProgress } from '@material-ui/core';
 import { animateScroll } from 'react-scroll';
+import { useSelector } from 'react-redux';
+import { selectAuthed } from '../../actions/userActions/userSelectors';
 import { getChatRoom, getUser } from '../../graphql/queries';
 import { onCreateMessage } from '../../graphql/subscriptions';
 import ChatMessage from '../../components/ChatMessage/ChatMessage';
@@ -12,12 +14,13 @@ import MessageInput from '../../components/MessageInput/MessageInput';
 import MenuIcon from '../../components/MenuIcon/MenuIcon';
 import './ChatRoom.scss';
 
-const ChatRoom = ({ isAuthed, currentUserID, width }) => {
+const ChatRoom = ({ width }) => {
   const { roomId, conversationId, conversationName } = useParams();
   const [roomMessages, setRoomMessages] = useState(null);
   const [secondUser, setSecondUser] = useState(null);
   const [navOpen, setNavOpen] = useState(false);
   const showPhoneNav = width <= 900 && navOpen;
+  const isAuthed = useSelector(selectAuthed);
 
   const history = useHistory();
   if (isAuthed === false) {
@@ -124,12 +127,9 @@ const ChatRoom = ({ isAuthed, currentUserID, width }) => {
           )}
         </div>
         <div className="input-adjust-two">
-          { currentUserID !== null && (
-            <MessageInput
-              roomID={roomId}
-              currentUserID={currentUserID}
-            />
-          ) }
+          <MessageInput
+            roomID={roomId}
+          />
         </div>
       </div>
     </div>
@@ -137,8 +137,6 @@ const ChatRoom = ({ isAuthed, currentUserID, width }) => {
 };
 
 ChatRoom.propTypes = {
-  isAuthed: PropTypes.bool.isRequired,
-  currentUserID: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
 };
 

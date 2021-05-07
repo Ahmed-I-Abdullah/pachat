@@ -3,6 +3,7 @@ import {
   Switch, Route, BrowserRouter as Router,
 } from 'react-router-dom';
 import { Auth, API, graphqlOperation } from 'aws-amplify';
+import { useSelector } from 'react-redux';
 import ChatRoom from './pages/ChatRoom/ChatRoom';
 import ChatList from './pages/ChatList/ChatList';
 import UsersList from './pages/UsersList/UsersList';
@@ -12,13 +13,12 @@ import LogIn from './pages/LogIn/LogIn';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import { createUser } from './graphql/mutations';
 import { getUser } from './graphql/queries';
+import { selectAuthed } from './actions/userActions/userSelectors';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [width, setWidth] = useState(window.innerWidth);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [currentUserID, setCurrentUserID] = useState(null);
   const [afterSignIn, setAfterSignIn] = useState(false);
+  const isAuthed = useSelector(selectAuthed);
   const breakpoint = 900;
 
   const [styles, setStyles] = useState({
@@ -41,14 +41,10 @@ function App() {
       let tempUser = null;
       await Auth.currentAuthenticatedUser()
         .then((user) => {
-          setCurrentUser(user);
           tempUser = user;
-          setCurrentUserID(user.attributes.sub);
-          setIsAuthenticated(true);
         })
         .catch((user) => {
           console.log('entered catch block: ', user);
-          setIsAuthenticated(false);
         });
 
       if (tempUser) {
@@ -86,7 +82,7 @@ function App() {
         minHeight: '100vh',
         overflow: 'auto',
       });
-    } else if (isAuthenticated === false) {
+    } else if (!isAuthed) {
       setStyles({});
     } else {
       setStyles({
@@ -109,89 +105,75 @@ function App() {
 
   useEffect(() => {
     updateUser();
-  }, [isAuthenticated, afterSignIn]);
+  }, [afterSignIn]);
 
-  if ((isAuthenticated === true && currentUserID !== null && currentUser !== null)
-      || (isAuthenticated === false)) {
-    return (
-      <div
-        style={styles}
-        className="App"
-      >
-        <Router>
-          <Switch>
-            <Route
-              path="/"
-              exact
-              render={() => (
-                <ChatList
-                  isAuthed={isAuthenticated}
-                  currentUserID={currentUserID}
-                  width={width}
-                />
-              )}
-            />
-            <Route
-              path="/users"
-              exact
-              render={() => (
-                <UsersList
-                  isAuthed={isAuthenticated}
-                  currentUserID={currentUserID}
-                  width={width}
-                />
-              )}
-            />
-            <Route
-              path="/conversation/:roomId/:conversationId/:conversationName"
-              exact
-              render={() => (
-                <ChatRoom
-                  isAuthed={isAuthenticated}
-                  currentUserID={currentUserID}
-                  width={width}
-                />
-              )}
-            />
-            <Route
-              path="/login"
-              exact
-              render={() => (
-                <LogIn
-                  setIsAuthenticated={setIsAuthenticated}
-                  setStyles={setStyles}
-                  setCurrentUser={setCurrentUser}
-                  setCurrentUserID={setCurrentUserID}
-                  width={width}
-                  updateUser={updateUser}
-                  setAfterSignIn={setAfterSignIn}
-                />
-              )}
-            />
-            <Route
-              path="/signup"
-              exact
-              render={() => (
-                <SignUp setStyles={setStyles} />
-              )}
-            />
-            <Route
-              path="/profile"
-              exact
-              render={() => (
-                <ProfilePage
-                  isAuthed={isAuthenticated}
-                  currentUser={currentUser}
-                  width={width}
-                />
-              )}
-            />
-            <Route component={PageNotFound} />
-          </Switch>
-        </Router>
-      </div>
-    );
-  } return null;
+  return (
+    <div
+      style={styles}
+      className="App"
+    >
+      <Router>
+        <Switch>
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <ChatList
+                width={width}
+              />
+            )}
+          />
+          <Route
+            path="/users"
+            exact
+            render={() => (
+              <UsersList
+                width={width}
+              />
+            )}
+          />
+          <Route
+            path="/conversation/:roomId/:conversationId/:conversationName"
+            exact
+            render={() => (
+              <ChatRoom
+                width={width}
+              />
+            )}
+          />
+          <Route
+            path="/login"
+            exact
+            render={() => (
+              <LogIn
+                setStyles={setStyles}
+                width={width}
+                updateUser={updateUser}
+                setAfterSignIn={setAfterSignIn}
+              />
+            )}
+          />
+          <Route
+            path="/signup"
+            exact
+            render={() => (
+              <SignUp setStyles={setStyles} />
+            )}
+          />
+          <Route
+            path="/profile"
+            exact
+            render={() => (
+              <ProfilePage
+                width={width}
+              />
+            )}
+          />
+          <Route component={PageNotFound} />
+        </Switch>
+      </Router>
+    </div>
+  );
 }
 
 export default App;

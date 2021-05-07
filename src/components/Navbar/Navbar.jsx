@@ -3,18 +3,22 @@ import PropTypes from 'prop-types';
 import { NavLink, useHistory } from 'react-router-dom';
 import { TiMessages } from 'react-icons/ti';
 import { Auth } from 'aws-amplify';
+import { useDispatch } from 'react-redux';
 import { FaUsers, FaSignOutAlt } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
+import { userSignedOut } from '../../actions/userActions/userActionCreators';
 import './NavBar.scss';
 import logo from '../../assets/darkLogo.svg';
 
 const NavBar = ({ activePage, width, setNavOpen }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   async function signOut() {
     try {
       await Auth.signOut();
+      dispatch(userSignedOut());
       history.push('/login');
     } catch (error) {
       console.log('Error signing out: ', error);

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../actions/userActions/userSelectors';
 import { createMessage } from '../../graphql/mutations';
 import './MessageInput.scss';
 
-const MessageInput = ({ roomID, currentUserID }) => {
+const MessageInput = ({ roomID }) => {
   const [message, setMessage] = useState('');
+  const currentUser = useSelector(selectUser);
 
   const onSend = async () => {
     if (message !== '') {
@@ -13,7 +16,7 @@ const MessageInput = ({ roomID, currentUserID }) => {
         createMessage, {
           input: {
             content: message,
-            userID: currentUserID,
+            userID: currentUser.attributes.sub,
             chatRoomID: roomID,
           },
         },
@@ -40,7 +43,6 @@ const MessageInput = ({ roomID, currentUserID }) => {
 
 MessageInput.propTypes = {
   roomID: PropTypes.string.isRequired,
-  currentUserID: PropTypes.string.isRequired,
 };
 
 export default MessageInput;
