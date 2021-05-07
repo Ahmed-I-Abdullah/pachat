@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Auth } from 'aws-amplify';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { userLoggedIn } from '../../actions/userActions/userActionCreators';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
 const LogIn = ({
-  setIsAuthenticated, setStyles, setCurrentUser, setCurrentUserID, width, setAfterSignIn,
+  setStyles, width, setAfterSignIn,
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,10 +16,8 @@ const LogIn = ({
     username: '',
     password: '',
   });
+  const dispatch = useDispatch();
   useEffect(() => {
-    setCurrentUser(null);
-    setCurrentUserID(null);
-    setIsAuthenticated(false);
     setStyles({});
   }, []);
 
@@ -39,8 +39,8 @@ const LogIn = ({
     }
   };
   async function signIn() {
-    await Auth.signIn(username, password).then(() => {
-      setIsAuthenticated(true);
+    await Auth.signIn(username, password).then((user) => {
+      dispatch(userLoggedIn(user));
       setAfterSignIn(true);
       if (width > 900) {
         setStyles({
@@ -65,7 +65,6 @@ const LogIn = ({
       history.push('/');
     }).catch((error) => {
       console.log('Error signing in', error);
-      setIsAuthenticated(false);
       tempErrors.username = 'Username or password are invalid.';
       setErrors(tempErrors);
       setPassword('');
@@ -138,10 +137,7 @@ const LogIn = ({
 };
 
 LogIn.propTypes = {
-  setIsAuthenticated: PropTypes.func.isRequired,
   setStyles: PropTypes.func.isRequired,
-  setCurrentUser: PropTypes.func.isRequired,
-  setCurrentUserID: PropTypes.func.isRequired,
   setAfterSignIn: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
 };

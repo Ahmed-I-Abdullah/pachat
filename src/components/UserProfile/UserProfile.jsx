@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-// import { CircularProgress } from '@material-ui/core';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { useSelector } from 'react-redux';
 import { MdModeEdit } from 'react-icons/md';
 import { FaCheck } from 'react-icons/fa';
+import { selectUser } from '../../actions/userActions/userSelectors';
 import { getUser } from '../../graphql/queries';
 import { updateUser } from '../../graphql/mutations';
 import './UserProfile.scss';
 
-const UserProfile = ({ currentUser }) => {
+const UserProfile = () => {
   const [editName, setEditName] = useState(false);
   const [editStatus, setEditStatus] = useState(false);
   const [name, setName] = useState(null);
   const [status, setStatus] = useState(null);
   const [imageUrl, setImageUrl] = useState('https://scontent-hbe1-1.xx.fbcdn.net/v/t1.30497-1/cp0/c15.0.50.50a/p50x50/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-3&_nc_sid=12b3be&_nc_ohc=ShshImdEV0cAX9oxBnD&_nc_ht=scontent-hbe1-1.xx&tp=27&oh=2f020e7365f33da4f2078c61a05c7e65&oe=60A1F0B8');
+  const currentUser = useSelector(selectUser);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -174,15 +175,6 @@ const UserProfile = ({ currentUser }) => {
       </div>
     </div>
   );
-};
-
-UserProfile.propTypes = {
-  currentUser: PropTypes.shape({
-    attributes: PropTypes.shape({
-      sub: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
 };
 
 export default UserProfile;

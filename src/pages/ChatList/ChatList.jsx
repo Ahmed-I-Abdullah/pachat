@@ -4,19 +4,21 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { API, graphqlOperation } from 'aws-amplify';
 import { CircularProgress } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { selectAuthed, selectUser } from '../../actions/userActions/userSelectors';
 import ChatListItem from '../../components/ChatListItem/ChatListItem';
 import NavBar from '../../components/NavBar/NavBar';
 import MenuIcon from '../../components/MenuIcon/MenuIcon';
 import './ChatList.scss';
 import { getUser } from './queries';
 
-const ChatList = ({
-  isAuthed, currentUserID, width,
-}) => {
+const ChatList = ({ width }) => {
   const [chatRooms, setChatRooms] = useState(null);
   const [navOpen, setNavOpen] = useState(false);
   const history = useHistory();
   const showPhoneNav = width <= 900 && navOpen;
+  const isAuthed = useSelector(selectAuthed);
+  const currentUser = useSelector(selectUser);
 
   if (isAuthed === false) {
     history.push('/login');
@@ -27,7 +29,7 @@ const ChatList = ({
       const currentUserData = await API.graphql(
         graphqlOperation(
           getUser, {
-            id: currentUserID,
+            id: currentUser.attributes.sub,
           },
         ),
       );
@@ -93,8 +95,6 @@ const ChatList = ({
 };
 
 ChatList.propTypes = {
-  isAuthed: PropTypes.bool.isRequired,
-  currentUserID: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
 };
 
