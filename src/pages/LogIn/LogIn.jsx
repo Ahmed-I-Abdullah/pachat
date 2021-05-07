@@ -4,12 +4,12 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import useWidth from '../../hooks/useWidth';
-import { userLoggedIn } from '../../actions/userActions/userActionCreators';
+import signInAndUpdateUser from '../../middleware/userMiddleWare';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
 const LogIn = ({
-  setStyles, setAfterSignIn,
+  setStyles,
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -41,8 +41,7 @@ const LogIn = ({
   };
   async function signIn() {
     await Auth.signIn(username, password).then((user) => {
-      dispatch(userLoggedIn(user));
-      setAfterSignIn(true);
+      dispatch(signInAndUpdateUser(user));
       if (width > 900) {
         setStyles({
           borderRadius: '50px',
@@ -139,7 +138,6 @@ const LogIn = ({
 
 LogIn.propTypes = {
   setStyles: PropTypes.func.isRequired,
-  setAfterSignIn: PropTypes.func.isRequired,
 };
 
 export default LogIn;
