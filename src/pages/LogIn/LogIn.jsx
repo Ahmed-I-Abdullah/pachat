@@ -3,12 +3,13 @@ import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import useWidth from '../../hooks/useWidth';
 import { userLoggedIn } from '../../actions/userActions/userActionCreators';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
 const LogIn = ({
-  setStyles, width, setAfterSignIn,
+  setStyles, setAfterSignIn,
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +21,7 @@ const LogIn = ({
   useEffect(() => {
     setStyles({});
   }, []);
-
+  const width = useWidth();
   const history = useHistory();
 
   const tempErrors = {};
@@ -139,7 +140,6 @@ const LogIn = ({
 LogIn.propTypes = {
   setStyles: PropTypes.func.isRequired,
   setAfterSignIn: PropTypes.func.isRequired,
-  width: PropTypes.number.isRequired,
 };
 
 export default LogIn;

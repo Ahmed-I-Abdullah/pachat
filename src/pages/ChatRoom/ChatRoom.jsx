@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { API, graphqlOperation } from 'aws-amplify';
 import { CircularProgress } from '@material-ui/core';
 import { animateScroll } from 'react-scroll';
@@ -8,17 +7,19 @@ import { useSelector } from 'react-redux';
 import { selectAuthed } from '../../actions/userActions/userSelectors';
 import { getChatRoom, getUser } from '../../graphql/queries';
 import { onCreateMessage } from '../../graphql/subscriptions';
+import useWidth from '../../hooks/useWidth';
 import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import NavBar from '../../components/NavBar/NavBar';
 import MessageInput from '../../components/MessageInput/MessageInput';
 import MenuIcon from '../../components/MenuIcon/MenuIcon';
 import './ChatRoom.scss';
 
-const ChatRoom = ({ width }) => {
+const ChatRoom = () => {
   const { roomId, conversationId, conversationName } = useParams();
   const [roomMessages, setRoomMessages] = useState(null);
   const [secondUser, setSecondUser] = useState(null);
   const [navOpen, setNavOpen] = useState(false);
+  const width = useWidth();
   const showPhoneNav = width <= 900 && navOpen;
   const isAuthed = useSelector(selectAuthed);
 
@@ -134,10 +135,6 @@ const ChatRoom = ({ width }) => {
       </div>
     </div>
   );
-};
-
-ChatRoom.propTypes = {
-  width: PropTypes.number.isRequired,
 };
 
 export default ChatRoom;

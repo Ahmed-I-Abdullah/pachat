@@ -14,13 +14,12 @@ import ProfilePage from './pages/ProfilePage/ProfilePage';
 import { createUser } from './graphql/mutations';
 import { getUser } from './graphql/queries';
 import { selectAuthed } from './actions/userActions/userSelectors';
+import useWidth from './hooks/useWidth';
 
 function App() {
-  const [width, setWidth] = useState(window.innerWidth);
   const [afterSignIn, setAfterSignIn] = useState(false);
   const isAuthed = useSelector(selectAuthed);
-  const breakpoint = 900;
-
+  const width = useWidth();
   const [styles, setStyles] = useState({
     borderRadius: '50px',
     position: 'absolute',
@@ -74,10 +73,7 @@ function App() {
   };
 
   useEffect(() => {
-    const handleWindowResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleWindowResize);
-
-    if (width <= breakpoint) {
+    if (width <= 900) {
       setStyles({
         minHeight: '100vh',
         overflow: 'auto',
@@ -99,8 +95,6 @@ function App() {
         border: '10px solid var(--violet-red)',
       });
     }
-
-    return () => window.removeEventListener('resize', handleWindowResize);
   }, [width]);
 
   useEffect(() => {
@@ -118,27 +112,21 @@ function App() {
             path="/"
             exact
             render={() => (
-              <ChatList
-                width={width}
-              />
+              <ChatList />
             )}
           />
           <Route
             path="/users"
             exact
             render={() => (
-              <UsersList
-                width={width}
-              />
+              <UsersList />
             )}
           />
           <Route
             path="/conversation/:roomId/:conversationId/:conversationName"
             exact
             render={() => (
-              <ChatRoom
-                width={width}
-              />
+              <ChatRoom />
             )}
           />
           <Route
@@ -147,7 +135,6 @@ function App() {
             render={() => (
               <LogIn
                 setStyles={setStyles}
-                width={width}
                 updateUser={updateUser}
                 setAfterSignIn={setAfterSignIn}
               />
@@ -164,9 +151,7 @@ function App() {
             path="/profile"
             exact
             render={() => (
-              <ProfilePage
-                width={width}
-              />
+              <ProfilePage />
             )}
           />
           <Route component={PageNotFound} />
