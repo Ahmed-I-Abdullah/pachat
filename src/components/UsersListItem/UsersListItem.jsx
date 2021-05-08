@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { useHistory } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
 import { createChatRoom, createChatRoomUser } from '../../graphql/mutations';
+import { fetchChatRooms } from '../../middleware/listMiddleWare';
 import './UsersListItem.scss';
 
 const UsersListItem = ({ user }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const onClick = async () => {
     try {
       const newChatRoomObject = await API.graphql(graphqlOperation(createChatRoom, {
@@ -32,6 +35,7 @@ const UsersListItem = ({ user }) => {
       }));
 
       history.push(`conversation/${newChatRoom.id}/${user.id}/${user.fullName}`);
+      dispatch(fetchChatRooms);
     } catch (e) {
       console.log('Room creation error: ', e);
     }

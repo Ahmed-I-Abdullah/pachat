@@ -2,26 +2,46 @@
 // this is an auto generated file. This will be overwritten
 
 export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
+query GetUser($id: ID!) {
     getUser(id: $id) {
-      id
-      fullName
-      imageUrl
-      status
-      chatRooms {
-        items {
+    id
+    fullName
+    imageUrl
+    status
+    chatRooms {
+      items {
+        id
+        userID
+        chatRoomID
+        createdAt
+        updatedAt
+        chatRoom {
           id
-          userID
-          chatRoomID
-          createdAt
           updatedAt
+          users {
+            items {
+              user {
+                id
+                fullName
+                imageUrl
+                status
+              }
+            }
+          }
+          messages {
+            items {
+              updatedAt
+              content
+            }
+          }
         }
-        nextToken
       }
-      createdAt
-      updatedAt
+      nextToken
     }
+    createdAt
+    updatedAt
   }
+}
 `;
 export const listUsers = /* GraphQL */ `
   query ListUsers(

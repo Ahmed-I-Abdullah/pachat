@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import useWidth from '../../hooks/useWidth';
 import signInAndUpdateUser from '../../middleware/userMiddleWare';
+import { fetchChatRooms } from '../../middleware/listMiddleWare';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import './LogIn.scss';
 
@@ -63,6 +64,7 @@ const LogIn = ({
         });
       }
       history.push('/');
+      dispatch(fetchChatRooms);
     }).catch((error) => {
       console.log('Error signing in', error);
       tempErrors.username = 'Username or password are invalid.';

@@ -8,6 +8,7 @@ import { FaUsers, FaSignOutAlt } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
 import { userSignedOut } from '../../actions/userActions/userActionCreators';
+import { listSignedOut } from '../../actions/listActions/listActionCreators';
 import './NavBar.scss';
 import logo from '../../assets/darkLogo.svg';
 
@@ -18,7 +19,9 @@ const NavBar = ({ activePage, width, setNavOpen }) => {
   async function signOut() {
     try {
       await Auth.signOut();
-      dispatch(userSignedOut());
+      dispatch(userSignedOut);
+      dispatch(listSignedOut);
+      window.location.reload();
       history.push('/login');
     } catch (error) {
       console.log('Error signing out: ', error);

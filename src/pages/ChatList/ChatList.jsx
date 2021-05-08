@@ -1,62 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AiFillWechat } from 'react-icons/ai';
 import { useHistory } from 'react-router-dom';
-import { API, graphqlOperation } from 'aws-amplify';
 import { CircularProgress } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { selectAuthed, selectUser } from '../../actions/userActions/userSelectors';
+import { selectAuthed } from '../../actions/userActions/userSelectors';
+import { selectChatList } from '../../actions/listActions/listSelectors';
 import ChatListItem from '../../components/ChatListItem/ChatListItem';
 import NavBar from '../../components/NavBar/NavBar';
 import MenuIcon from '../../components/MenuIcon/MenuIcon';
 import './ChatList.scss';
-import { getUser } from './queries';
 import useWidth from '../../hooks/useWidth';
 
 const ChatList = () => {
-  const [chatRooms, setChatRooms] = useState(null);
   const [navOpen, setNavOpen] = useState(false);
   const width = useWidth();
   const history = useHistory();
   const isAuthed = useSelector(selectAuthed);
-  const currentUser = useSelector(selectUser);
+  const chatRooms = useSelector(selectChatList);
   const showPhoneNav = width <= 900 && navOpen;
 
   if (isAuthed === false) {
     history.push('/login');
   }
-
-  const fetchChatRooms = async () => {
-    try {
-      const currentUserData = await API.graphql(
-        graphqlOperation(
-          getUser, {
-            id: currentUser.attributes.sub,
-          },
-        ),
-      );
-
-      if (currentUserData.data.getUser === null) {
-        setChatRooms([]);
-      }
-      if (chatRooms === null) {
-        setChatRooms(currentUserData.data.getUser.chatRooms.items.sort(
-          (a, b) => {
-            if (new Date(b.chatRoom.messages.items.pop().updatedAt)
-    - new Date(a.chatRoom.messages.items.pop().updatedAt) > 0) {
-              return 1;
-            }
-            return -1;
-          },
-        ));
-      }
-    } catch (e) {
-      console.log('Chat rooms error in ChatList is: ', e);
-    }
-  };
-
-  useEffect(() => {
-    fetchChatRooms();
-  }, []);
 
   return (
     <div className="chat-list-container">
