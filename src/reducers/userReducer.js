@@ -1,8 +1,11 @@
 import { LOGIN, SIGNOUT } from '../actions/userActions/userTypes';
+import { loadUser } from '../localStorage';
 
+const persistedUser = JSON.parse(loadUser());
+console.log('persisted user is: ', persistedUser);
 const initialState = {
-  isAuthed: false,
-  currentUser: null,
+  isAuthed: persistedUser ? persistedUser.isAuthed : false,
+  currentUser: persistedUser ? persistedUser.currentUser : null,
 };
 
 const userReducer = (state = initialState, action) => {

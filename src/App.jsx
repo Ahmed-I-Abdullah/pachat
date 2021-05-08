@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {
   Switch, Route, BrowserRouter as Router,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { Auth } from 'aws-amplify';
 import ChatRoom from './pages/ChatRoom/ChatRoom';
 import ChatList from './pages/ChatList/ChatList';
 import UsersList from './pages/UsersList/UsersList';
@@ -11,11 +12,14 @@ import SignUp from './pages/SignUp/SignUp';
 import LogIn from './pages/LogIn/LogIn';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import { selectAuthed } from './actions/userActions/userSelectors';
+import signInAndUpdateUser from './middleware/userMiddleWare';
+import { fetchChatRooms } from './middleware/listMiddleWare';
 import useWidth from './hooks/useWidth';
 
 function App() {
   const isAuthed = useSelector(selectAuthed);
   const width = useWidth();
+  const dispatch = useDispatch();
   const [styles, setStyles] = useState({
     borderRadius: '50px',
     position: 'absolute',
@@ -29,6 +33,9 @@ function App() {
     boxShadow: '8px 8px 8px 6px #D9D2D2',
     border: '10px solid var(--violet-red)',
   });
+  if (isAuthed) {
+    window.onload = dispatch(fetchChatRooms);
+  }
 
   useEffect(() => {
     if (width <= 900) {
@@ -54,6 +61,18 @@ function App() {
       });
     }
   }, [width]);
+
+  useEffect(() => {
+    const updateUser = async () => {
+      await Auth.currentAuthenticatedUser()
+        .then((user) => {
+          console.log('I am in');
+          dispatch(signInAndUpdateUser(user));
+        })
+        .catch((err) => console.log('updating user in App error: ', err));
+    };
+    updateUser();
+  });
 
   return (
     <div

@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { FaUsers, FaSignOutAlt } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
+import { resetUser } from '../../localStorage';
 import { userSignedOut } from '../../actions/userActions/userActionCreators';
 import { listSignedOut } from '../../actions/listActions/listActionCreators';
 import './NavBar.scss';
@@ -19,6 +20,7 @@ const NavBar = ({ activePage, width, setNavOpen }) => {
   async function signOut() {
     try {
       await Auth.signOut();
+      resetUser();
       dispatch(userSignedOut);
       dispatch(listSignedOut);
       window.location.reload();

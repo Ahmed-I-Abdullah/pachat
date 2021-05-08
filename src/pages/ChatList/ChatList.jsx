@@ -18,8 +18,9 @@ const ChatList = () => {
   const isAuthed = useSelector(selectAuthed);
   const chatRooms = useSelector(selectChatList);
   const showPhoneNav = width <= 900 && navOpen;
+  console.log('current is authed: ', isAuthed);
 
-  if (isAuthed === false) {
+  if (isAuthed === false || isAuthed === undefined) {
     history.push('/login');
   }
 
