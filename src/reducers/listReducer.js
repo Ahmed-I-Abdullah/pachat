@@ -1,4 +1,4 @@
-import { CHAT_LIST_LOADED, USERS_LIST_LOADED } from '../actions/listActions/listTypes';
+import { CHAT_LIST_LOADED, USERS_LIST_LOADED, LIST_SIGNED_OUT } from '../actions/listActions/listTypes';
 
 const initialState = {
   chats: null,
@@ -16,6 +16,12 @@ const listReducer = (state = initialState, action) => {
       return {
         ...state,
         users: action.payload,
+      };
+    case LIST_SIGNED_OUT:
+      return {
+        ...state,
+        chats: null,
+        users: null,
       };
     default:
       return state;
