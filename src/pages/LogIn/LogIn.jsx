@@ -3,6 +3,7 @@ import { Auth } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { saveUser } from '../../localStorage';
 import useWidth from '../../hooks/useWidth';
 import signInAndUpdateUser from '../../middleware/userMiddleWare';
 import { fetchChatRooms } from '../../middleware/listMiddleWare';
@@ -42,6 +43,7 @@ const LogIn = ({
   };
   async function signIn() {
     await Auth.signIn(username, password).then((user) => {
+      saveUser(user);
       dispatch(signInAndUpdateUser(user));
       if (width > 900) {
         setStyles({
