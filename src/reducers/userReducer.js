@@ -1,7 +1,7 @@
 import { LOGIN, SIGNOUT } from '../actions/userActions/userTypes';
 import { loadUser } from '../localStorage';
 
-const persistedUser = JSON.parse(loadUser());
+const persistedUser = loadUser() ? JSON.parse(loadUser()) : undefined;
 console.log('persisted user is: ', persistedUser);
 const initialState = {
   isAuthed: persistedUser ? persistedUser.isAuthed : false,
