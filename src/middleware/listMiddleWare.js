@@ -51,8 +51,8 @@ export const fetchChatRooms = async (dispatch, getState) => {
     }
     const loadedChatRooms = currentUserData.data.getUser.chatRooms.items.sort(
       (a, b) => {
-        if (a.chatRoom.messages.items.pop() !== undefined
-        && b.chatRoom.messages.items.pop() !== undefined) {
+        if (a.chatRoom.messages.items.length !== 0
+        && b.chatRoom.messages.items.length !== 0) {
           if (new Date(b.chatRoom.messages.items.pop().updatedAt)
   - new Date(a.chatRoom.messages.items.pop().updatedAt) > 0) {
             return 1;
