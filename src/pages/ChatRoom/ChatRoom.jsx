@@ -43,7 +43,7 @@ const ChatRoom = () => {
               id: roomId,
             },
           ),
-        );
+        ).catch((err) => console.log('getting chatroom from database error: ', err));
 
         const otherUser = await API.graphql(
           graphqlOperation(

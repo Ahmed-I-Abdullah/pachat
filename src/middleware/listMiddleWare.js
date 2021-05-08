@@ -4,7 +4,6 @@ import { getUser, listUsers } from '../graphql/queries';
 
 export const fetchUsers = async (dispatch, getState) => {
   const chatRooms = getState().lists.chats;
-  console.log('received chats are: ', chatRooms);
   const currentUserID = getState().users.currentUser.attributes.sub;
   const customFilter = (userToCheck) => {
     let roomExits = false;
@@ -46,23 +45,24 @@ export const fetchChatRooms = async (dispatch, getState) => {
       ),
     );
 
-    if (currentUserData.data.getUser === null) {
+    if (currentUserData.data.getUser !== null) {
+      dispatch(chatListLoaded(
+        currentUserData.data.getUser.chatRooms.items.sort(
+          (a, b) => {
+            if (a.chatRoom.messages.items.length !== 0
+          && b.chatRoom.messages.items.length !== 0) {
+              if (new Date(b.chatRoom.messages.items.pop().updatedAt)
+    - new Date(a.chatRoom.messages.items.pop().updatedAt) > 0) {
+                return 1;
+              }
+            }
+            return -1;
+          },
+        ),
+      ));
+    } else {
       dispatch(chatListLoaded([]));
     }
-    const loadedChatRooms = currentUserData.data.getUser.chatRooms.items.sort(
-      (a, b) => {
-        if (a.chatRoom.messages.items.length !== 0
-        && b.chatRoom.messages.items.length !== 0) {
-          if (new Date(b.chatRoom.messages.items.pop().updatedAt)
-  - new Date(a.chatRoom.messages.items.pop().updatedAt) > 0) {
-            return 1;
-          }
-        }
-        return -1;
-      },
-    );
-
-    dispatch(chatListLoaded(loadedChatRooms));
     dispatch(fetchUsers);
   } catch (err) {
     console.log('Error fetching chats in list middleware, : ', err);

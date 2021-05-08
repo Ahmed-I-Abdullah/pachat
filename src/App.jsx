@@ -3,7 +3,6 @@ import {
   Switch, Route, BrowserRouter as Router,
 } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Auth } from 'aws-amplify';
 import ChatRoom from './pages/ChatRoom/ChatRoom';
 import ChatList from './pages/ChatList/ChatList';
 import UsersList from './pages/UsersList/UsersList';
@@ -12,7 +11,6 @@ import SignUp from './pages/SignUp/SignUp';
 import LogIn from './pages/LogIn/LogIn';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import { selectAuthed } from './actions/userActions/userSelectors';
-import signInAndUpdateUser from './middleware/userMiddleWare';
 import { fetchChatRooms } from './middleware/listMiddleWare';
 import useWidth from './hooks/useWidth';
 
@@ -61,18 +59,6 @@ function App() {
       });
     }
   }, [width]);
-
-  useEffect(() => {
-    const updateUser = async () => {
-      await Auth.currentAuthenticatedUser()
-        .then((user) => {
-          console.log('I am in');
-          dispatch(signInAndUpdateUser(user));
-        })
-        .catch((err) => console.log('updating user in App error: ', err));
-    };
-    updateUser();
-  });
 
   return (
     <div

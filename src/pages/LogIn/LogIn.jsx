@@ -45,6 +45,7 @@ const LogIn = ({
     await Auth.signIn(username, password).then((user) => {
       saveUser(user);
       dispatch(signInAndUpdateUser(user));
+      dispatch(fetchChatRooms);
       if (width > 900) {
         setStyles({
           borderRadius: '50px',
@@ -66,7 +67,6 @@ const LogIn = ({
         });
       }
       history.push('/');
-      dispatch(fetchChatRooms);
     }).catch((error) => {
       console.log('Error signing in', error);
       tempErrors.username = 'Username or password are invalid.';
