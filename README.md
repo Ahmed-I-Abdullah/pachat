@@ -2,8 +2,6 @@
 ---
 ## A Real-Time Chat App
 
-![](src/assets/design/mockup.jpg)
-
 ## Built With:
 - AWS AppSync
 - AWS Amplify
