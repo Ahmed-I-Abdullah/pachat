@@ -9,7 +9,7 @@ type User
 }
 
 type ChatRoomUser
-@model(queries: null)
+@model
 @key(name: "byUser", fields: ["userID", "chatRoomID"])
 @key(name: "byChatRoom", fields: ["chatRoomID", "userID"]) {
 id: ID!
